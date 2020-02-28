@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">TheMovies</string>
+
+    <!-- region ERRORS -->
+    <string name="error_invalid_data">Tente novamente mais tarde</string>
+    <!-- endregion -->
+
+    <!-- region Toolbar -->
+    <string name="item_toolbar_back_button_content_description">Botão Voltar</string>
+    <!-- endregion -->
+
+    <!-- region MAIN -->
+    <string name="main_toolbar_title">The Movies</string>
+    <string name="main_toolbar_title_populars">Populares</string>
+    <string name="main_toolbar_title_favorites">Favoritos</string>
+    <string name="main_toolbar_search_title">Pesquisar</string>
+    <string name="main_item_movie_text_popularity_description">%1$s visualizações</string>
+    <string name="main_item_movie_vote_average">%1$s %%</string>
+    
+    <string name="main_tab_item_populars">Populares</string>
+    <string name="main_tab_item_favorites">Favoritos</string>
+
+    <string name="item_movie_content_description_image">Imagem do Filme</string>
+    <!-- endregion -->
+
+    <!-- region DETAIL -->
+    <string name="item_movie_detail_content_description_favorite">Botão para favoritar filme</string>
+    <string name="detail_movie_text_popularity_description">%1$s visualizações</string>
+    <string name="detail_movie_text_genre">Gênero: %1$s</string>
+    <string name="detail_movie_text_release_date">Lançamento: %1$s</string>
+    <string name="detail_movie_text_overview_header">Sinopse: </string>
+    <string name="detail_movie_favorite_message">Adicionado aos favoritos</string>
+    <string name="detail_movie_not_favorite_message">Removido dos favoritos</string>
+    <string name="detail_movie_error_data_init">Ocorreu um erro inexperado</string>
+    <string name="detail_movie_text_title_related">Relacionados</string>
+    <!-- endregion -->
+
+</resources>

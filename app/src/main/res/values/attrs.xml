@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageViewMovie">
+        <attr name="imageType" >
+            <enum name="poster" value="0" />
+            <enum name="back_drop" value="1" />
+            <enum name="back_drop_in_list" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+</resources>
