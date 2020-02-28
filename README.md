@@ -14,6 +14,6 @@ Para mais detalhes das bibliotecas utilizadas acesse a documentação das mesmas
 
 Uma pequena amostra do funcionamento:
 
-<img src="TheMovies/Screenshots/Splash.png"> <img src="TheMovies/Screenshots/Main.png"> <img src="TheMovies/Screenshots/Details.png">
+<img src="TheMovies/Screenshots/Splash.png?w=512"> <img src="TheMovies/Screenshots/Main.png?w=512"> <img src="TheMovies/Screenshots/Details.png?w=512">
 
 Obrigado pela visita!
