@@ -14,6 +14,6 @@ Para mais detalhes das bibliotecas utilizadas acesse a documentação das mesmas
 
 Uma pequena amostra do funcionamento:
 
-<img src="TheMovies/Screenshots/Splash.png?w=512"> <img src="TheMovies/Screenshots/Main.png?w=512"> <img src="TheMovies/Screenshots/Details.png?w=512">
+<img src="https://user-images.githubusercontent.com/26100669/75552724-ad81cf00-5a15-11ea-9690-7cb230c6dabd.png?w=512" height="532" width="256"> <img src="https://user-images.githubusercontent.com/26100669/75553181-a1e2d800-5a16-11ea-9dd4-6bc90c16cc9b.png?w=512" height="532" width="256"> <img src="https://user-images.githubusercontent.com/26100669/75553296-dfdffc00-5a16-11ea-9aa8-d30da9c0b4bd.png?w=512" height="532" width="256">
 
 Obrigado pela visita!
