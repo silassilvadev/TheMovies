@@ -1,6 +1,6 @@
 **<h2>The Movies</h2>**
 
-Projeto está sendo desenvolvimento para testar alguns conceitos, componentes e bibliotecas famosas no desenvolvimento Android por seu grande auxílio na separação de responsabilidades entre as partes do Aplicativo. Está sendo utilizada a arquitetura MVVM e abaixo estão listadas as principais bibliotecas nomesmo.
+Projeto está sendo desenvolvido para testar alguns conceitos, componentes e bibliotecas conhecidas no desenvolvimento Android, por auxiliar na separação de responsabilidades entre as partes do Aplicativo. Está sendo utilizada a arquitetura MVVM e abaixo estão listadas as principais bibliotecas utilizadas no mesmo.
 
 * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 * [Coroutines](https://developer.android.com/kotlin/coroutines)
