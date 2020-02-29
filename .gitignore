@@ -1,7 +1,17 @@
+# OS-specific files
+.DS_Store
+../.DS_Store
+*/.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.orig
+
 # Built application files
-*.apk
 *.ap_
-*.aab
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -13,7 +23,6 @@
 bin/
 gen/
 out/
-release/
 
 # Gradle files
 .gradle/
@@ -36,22 +45,13 @@ captures/
 
 # IntelliJ
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/gradle.xml
-.idea/assetWizardSettings.xml
-.idea/dictionaries
-.idea/libraries
-# Android Studio 3 in .gitignore file.
-.idea/caches
-.idea/modules.xml
-# Comment next line if keeping position of elements in Navigation Editor is relevant for you
-.idea/navEditor.xml
+*.idea
+.idea
+idea/
 
 # Keystore files
-# Uncomment the following lines if you do not want to check your keystore files in.
+# Uncomment the following line if you do not want to check your keystore files in.
 #*.jks
-#*.keystore
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
@@ -70,13 +70,3 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
-
-# Version control
-vcs.xml
-
-# lint
-lint/intermediates/
-lint/generated/
-lint/outputs/
-lint/tmp/
-# lint/reports/
