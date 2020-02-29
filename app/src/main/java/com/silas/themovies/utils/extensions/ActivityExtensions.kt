@@ -9,6 +9,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.silas.themovies.R
 import com.silas.themovies.utils.custom.ProgressDialogCustom
 
+/**
+ * Intent call facilitator in Activities
+ * @param params Extra intention parameters
+ */
 inline fun <reified T: Activity> Activity.startActivity(vararg params: Pair<String, Any>) {
     Intent(this, T::class.java).apply {
         setupParams(*params)
@@ -16,6 +20,10 @@ inline fun <reified T: Activity> Activity.startActivity(vararg params: Pair<Stri
     }
 }
 
+/**
+ * Intent call for result facilitator in Activities
+ * @param params Extra intention parameters
+ */
 inline fun <reified T: Activity> Activity.startActivityForResult(requestCode: Int,
                                                                  vararg params: Pair<String, Any>) {
     Intent(this, T::class.java).apply {
@@ -24,11 +32,23 @@ inline fun <reified T: Activity> Activity.startActivityForResult(requestCode: In
     }
 }
 
+/**
+ * Performs a transition animation between Activities
+ * @param isNext Sets the direction of the animation
+ */
 fun Activity.animateTransition(isNext: Boolean = true) {
     if (isNext) this.overridePendingTransition(R.anim.from_right_in, R.anim.from_left_out)
     else this.overridePendingTransition(R.anim.from_left_in, R.anim.from_right_out)
 }
 
+/**
+ * It helps to add an updatable Layout without the need to do it via xml,
+ * and gives the possibility to pass actions to be done when the update method is called.
+ *
+ * @param childId Resource id to be added to a SwipeRefreshLayout
+ * @param functions Functions to be performed during the update
+ * @return Return updated view
+ */
 fun Activity.addSwipeRefreshRoot(childId: Int, vararg functions: (() -> Unit)?): View {
     val swipeRefreshLayout = SwipeRefreshLayout(this).apply {
         setColorSchemeColors(myGetColor(R.color.colorAccent))
@@ -46,8 +66,19 @@ fun Activity.addSwipeRefreshRoot(childId: Int, vararg functions: (() -> Unit)?):
     }
 }
 
+/**
+ * @return Content View
+ */
+fun Activity.getContentView(): ViewGroup = findViewById(R.id.content)
+
 // region AppCompatActivity
+/**
+ * Starts a dialog of indeterminate progress
+ */
 fun AppCompatActivity.showProgress() = ProgressDialogCustom.instance.show(this.supportFragmentManager)
 
+/**
+ * Ends a dialog of indeterminate progress
+ */
 fun AppCompatActivity.hideProgress() = ProgressDialogCustom.instance.dismiss()
 //endregion

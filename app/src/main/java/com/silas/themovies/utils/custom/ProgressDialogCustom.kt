@@ -22,7 +22,7 @@ import java.util.*
  * @property instance last instance called class
  * @property show attribute that saves progress bar state
  *
- *@author silas.silva 23/02/2020
+ * @author silas.silva 23/02/2020
  * */
 
 class ProgressDialogCustom : DialogFragment() {
@@ -53,8 +53,8 @@ class ProgressDialogCustom : DialogFragment() {
             if (show || dialog != null && dialog!!.isShowing) return
             show = true
             super.show(manager, TAG)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (exception: IllegalStateException) {
+            exception.printStackTrace()
         }
     }
 
@@ -65,8 +65,8 @@ class ProgressDialogCustom : DialogFragment() {
         try {
             show = false
             if (!isHidden) super.dismiss()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (exception: IllegalStateException) {
+            exception.printStackTrace()
         }
     }
 

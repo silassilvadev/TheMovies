@@ -2,15 +2,22 @@ package com.silas.themovies.ui.generic
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
+import com.silas.themovies.R
 import com.silas.themovies.ui.IProtocolError
 import com.silas.themovies.ui.main.MainActivity
 import com.silas.themovies.utils.extensions.animateTransition
+import com.silas.themovies.utils.extensions.getContentView
 import com.silas.themovies.utils.extensions.hideProgress
 
+/**
+ * Is a generic class, for generic actions, as for example error messages and animations execute
+ *
+ * @sample GenericActivity class YourActivity: GenericActivity() { ... }
+ * @author Silas at 27/02/2020
+ */
 open class GenericActivity: AppCompatActivity(), IProtocolError {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +45,18 @@ open class GenericActivity: AppCompatActivity(), IProtocolError {
 
     override fun onResponseError(message: String) {
         hideProgress()
-        val contentView = findViewById<ViewGroup>(android.R.id.content)
-        Snackbar.make(contentView, message, Snackbar.LENGTH_SHORT).show()
+        val correctMessage =
+            if (message.isBlank()) getString(R.string.error_service_generic_response) else message
+        Snackbar.make(getContentView(), correctMessage, Snackbar.LENGTH_SHORT).show()
     }
 
+    /**
+     * Set up a custom toolbar, with its title and home as up button option
+     *
+     * @param toolbar Your customized Toolbar
+     * @param newTitle The title shown on the Toolbar
+     * @param isHomeAsUpEnabled To inform if Toolbar should contain Home as Up button
+     */
     internal fun setUpCustomToolbar(toolbar: Toolbar,
                                     newTitle: String,
                                     isHomeAsUpEnabled: Boolean = true){

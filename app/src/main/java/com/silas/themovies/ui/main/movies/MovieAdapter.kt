@@ -4,15 +4,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.silas.themovies.R
-import com.silas.themovies.model.entity.Movie
-import com.silas.themovies.model.dto.response.PagedListMovies
-import com.silas.themovies.model.entity.type.BackDropType
-import com.silas.themovies.model.entity.type.PosterPathType
+import com.silas.themovies.model.dto.response.Movie
+import com.silas.themovies.model.type.BackDropType
+import com.silas.themovies.model.type.PosterPathType
+import com.silas.themovies.utils.extensions.myGetColor
 import com.silas.themovies.utils.extensions.myGetDrawable
 import com.silas.themovies.utils.extensions.setUpImage
 import kotlinx.android.synthetic.main.item_movie.view.*
 
+/**
+ * Fragments adapter with ViewPagers of movies
+ *
+ * @param listMovies List of films to adapt to RecyclerView
+ * @param isRelated Flag to check if the items to be adapted are popular or related
+ * @param onClickMovie High-Order-Function responsible for passing a click listener
+ * of items in the current list
+ *
+ * @author Silas at 27/02/2020
+ */
 class MovieAdapter(private var listMovies: ArrayList<Movie>,
                    private var isRelated: Boolean = false,
                    private val onClickMovie: ((View, Movie) -> Unit)? = null)
@@ -25,9 +36,7 @@ class MovieAdapter(private var listMovies: ArrayList<Movie>,
                 if (isRelated) R.layout.item_movie_related else R.layout.item_movie,
                 parent,
                 false).run {
-                MovieViewHolder(
-                    this
-                )
+                MovieViewHolder(this)
         }
     }
 
@@ -36,10 +45,16 @@ class MovieAdapter(private var listMovies: ArrayList<Movie>,
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         listMovies[position].let { itMovie ->
             holder.itemView.apply {
+                val circularProgressDrawable = CircularProgressDrawable(context).apply {
+                    strokeWidth = 8f
+                    centerRadius = 32f
+                    setColorSchemeColors(context.myGetColor(R.color.colorAccent))
+                    start()
+                }
                 image_view_movie.setUpImage(
-                            if (isRelated) BackDropType.W_780.resolution + itMovie.endPointBackDrop
-                            else PosterPathType.W_780.resolution + itMovie.endPointPosterPath,
-                    context.myGetDrawable(R.drawable.ic_movie_error))
+                    if (isRelated) BackDropType.W_780.resolution + itMovie.endPointBackDrop
+                    else PosterPathType.W_780.resolution + itMovie.endPointPosterPath,
+                    circularProgressDrawable)
                 text_view_detail_movie_title.text = itMovie.title
                 text_view_detail_movie_popularity.text =
                     context.getString(
@@ -54,13 +69,14 @@ class MovieAdapter(private var listMovies: ArrayList<Movie>,
         }
     }
 
-    internal fun updateMovies(pagedListMovies: PagedListMovies): Int {
-        val lastPosition = itemCount - 1
-        (pagedListMovies.results as ArrayList<Movie>).apply {
-            if (pagedListMovies.page > 1) listMovies.addAll(this) else listMovies = this
-        }
+    /**
+     * Used to update items in the paged list when new items have been loaded
+     *
+     * @param movies Contains the new films to be added to the list
+     */
+    internal fun updateMovies(movies: ArrayList<Movie>) {
+        listMovies.addAll(movies)
         notifyDataSetChanged()
-        return lastPosition
     }
 
     class MovieViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)

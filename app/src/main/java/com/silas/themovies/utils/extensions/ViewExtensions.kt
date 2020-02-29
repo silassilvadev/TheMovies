@@ -10,6 +10,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import com.silas.themovies.R
 
+/**
+ * Configures Parent and/or Child Views to animate your changes
+ *
+ * @param isAnimateParent Specifies whether the Parent View should be animated by changing the Children
+ * @param isAnimate Specifies whether the View should animate your changes
+ *
+ * @author Silas at 23/02/2020
+ */
 fun ViewGroup.setupAllAnimations(isAnimateParent: Boolean = false, isAnimate: Boolean = true) {
     LayoutTransition().apply {
         setAnimateParentHierarchy(isAnimateParent)
@@ -19,6 +27,15 @@ fun ViewGroup.setupAllAnimations(isAnimateParent: Boolean = false, isAnimate: Bo
     }
 }
 
+/**
+ * Animates the extended view in the form of fading
+ *
+ * @param isFadeIn Enable Fade animation
+ * @param delay Animation waiting time
+ * @param onFinishAnimation Function that must be executed when ending animation
+ *
+ * @author Silas at 23/02/2020
+ */
 fun View.animateFade(isFadeIn: Boolean = true, delay: Long = 0, onFinishAnimation: ((isFinish: Boolean) -> Unit)? = null){
     this.context?.let {
         val fadeIn = AnimationUtils.loadAnimation(it, R.anim.alpha_in)

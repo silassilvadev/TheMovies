@@ -15,6 +15,11 @@ import com.silas.themovies.ui.main.movies.MoviesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+/**
+ * Configuration of dependency injections in the necessary modules of the App
+ *
+ * @author Silas at 26/02/2020
+ */
 class Module {
     companion object {
 

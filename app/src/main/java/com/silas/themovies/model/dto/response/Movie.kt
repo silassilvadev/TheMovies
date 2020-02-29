@@ -1,4 +1,4 @@
-package com.silas.themovies.model.entity
+package com.silas.themovies.model.dto.response
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
@@ -19,6 +19,9 @@ data class Movie(@PrimaryKey(autoGenerate = true)
                  @ColumnInfo(name = "popularity")
                  val popularity: String,
 
+                 @ColumnInfo(name = "overview")
+                 val overview: String,
+
                  @SerializedName("release_date")
                  @ColumnInfo(name = "release_date")
                  val releaseDate: String,
@@ -27,8 +30,8 @@ data class Movie(@PrimaryKey(autoGenerate = true)
                  @ColumnInfo(name = "vote_average")
                  val voteAverage: String,
 
-                 @Embedded(prefix = "Genre")
-                 val genres: List<Genre>,
+                 @Embedded
+                 val genres: ArrayList<Genre>?,
 
                  @SerializedName("backdrop_path")
                  @ColumnInfo(name = "backdrop_path")

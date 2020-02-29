@@ -1,8 +1,13 @@
 package com.silas.themovies.data.local.dao
 
 import androidx.room.*
-import com.silas.themovies.model.entity.Movie
+import com.silas.themovies.model.dto.response.Movie
 
+/**
+ * Here, queries to local data are mounted, and requested from the database
+ *
+ * @author Silas at 25/02/2020
+ */
 @Dao
 interface MoviesDao {
 

@@ -6,6 +6,10 @@ import android.os.Parcelable
 import java.io.Serializable
 import java.lang.ClassCastException
 
+/**
+ * Helper to create extra parameters for Intents
+ * @param params Extra parameters with keys and values
+ */
 fun Intent.setupParams(vararg params: Pair<String, Any>) {
     params.forEach {
         when (val param = it.second) {

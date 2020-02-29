@@ -9,6 +9,11 @@ import com.silas.themovies.utils.extensions.animateFade
 import com.silas.themovies.utils.extensions.startActivity
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
+/**
+ * Plays a friendly App loading screen
+ *
+ * @author Silas at 26/02/2020
+ */
 class SplashScreenActivity : GenericActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

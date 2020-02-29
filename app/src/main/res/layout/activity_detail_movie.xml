@@ -101,11 +101,18 @@
                     tools:text="Gênero(s): Ação, Aventura e Comédia"/>
 
                 <TextView
-                    android:id="@+id/text_view_detail_movie_date_header"
+                    android:id="@+id/text_view_detail_movie_release_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorLight"
                     tools:text="Lançamento: 23/02/2020"/>
+
+                <TextView
+                    android:id="@+id/text_view_detail_movie_vote_average"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorLight"
+                    tools:text="Avaliação: 7,1"/>
 
                 <TextView
                     android:id="@+id/text_view_detail_movie_synopsis_header"

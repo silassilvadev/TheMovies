@@ -2,8 +2,16 @@ package com.silas.themovies.data.local.database
 
 import android.content.Context
 import androidx.room.Room
+import com.silas.themovies.data.local.database.AppDatabase.Companion.DATABASE_NAME
 
-object MoviesDatabase {
+/**
+ * Creates a database object for local data storage
+ *
+ * @property database Volatile instance of database
+ *
+ * @author Silas at 25/02/2020
+ */
+object  MoviesDatabase {
     @Volatile
     private lateinit var database: AppDatabase
 
@@ -13,7 +21,7 @@ object MoviesDatabase {
             database = Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
-                "movies-db")
+                DATABASE_NAME)
                 .build()
             return database
         }

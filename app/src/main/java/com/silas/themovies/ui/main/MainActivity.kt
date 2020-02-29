@@ -10,13 +10,23 @@ import com.silas.themovies.ui.main.movies.TypeFragment
 import com.silas.themovies.utils.extensions.onTabSelected
 import kotlinx.android.synthetic.main.activity_main_movies.*
 
+/**
+ * Responsible for providing instances of Fragments and their ViewPagers,
+ * and integrating them with Tabs to show lists with similar items
+ *
+ * @property viewPagerAdapter Used to adapt Fragments in ViewPager
+ * @property currentQuery Current search entered by the user. When it is empty,
+ * all the films on the first page will be loaded
+ *
+ * @author Silas at 22/02/2020
+ */
 class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
 
     companion object {
         const val KEY_MOVIE = "keyMovieId"
     }
 
-    private lateinit var adapter: MainViewPagerAdapter
+    private lateinit var viewPagerAdapter: MainViewPagerAdapter
     internal var currentQuery = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +51,7 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, SearchVi
     }
 
     override fun onClose(): Boolean {
-        loadInCurrentFragment()
+        onQueryTextSubmit("")
         return false
     }
 
@@ -57,7 +67,7 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, SearchVi
     }
 
     private fun initView() {
-        this.adapter = MainViewPagerAdapter(
+        this.viewPagerAdapter = MainViewPagerAdapter(
             arrayListOf(
                 MoviesFragment(TypeFragment.POPULARS),
                 MoviesFragment(TypeFragment.FAVORITES)),
@@ -73,9 +83,12 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, SearchVi
         }
     }
 
-    private fun loadInCurrentFragment(page: Int = 1){
-        (this.adapter.getItem(tab_layout_main.selectedTabPosition) as MoviesFragment).apply {
-            loadMovies(currentQuery, page)
+    /**
+     * Responsible for loading the current Snippet by sending your current search
+     */
+    private fun loadInCurrentFragment() {
+        (this.viewPagerAdapter.getItem(tab_layout_main.selectedTabPosition) as MoviesFragment).apply {
+            loadMovies(currentQuery)
         }
     }
 }

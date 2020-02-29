@@ -1,14 +1,24 @@
 package com.silas.themovies.data.remote.service
 
-import androidx.lifecycle.LiveData
-import com.silas.themovies.model.dto.response.MovieDetails
+import androidx.paging.PageKeyedDataSource
 import com.silas.themovies.model.dto.response.PagedListMovies
-import retrofit2.Call
+import com.silas.themovies.model.dto.response.Movie
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * Here the Http requests are mounted, that is, where are the service's end points,
+ * as well as the objects to be sent in them and objects returned by the themes
+ *
+ * @author Silas at 22/02/2020
+ */
 interface MoviesService {
+
+    @GET("movie/popular")
+    suspend fun newLoadPopulars(@Query("api_key") apiKey: String,
+                             @Query("language") language: String,
+                             @Query("page") page: Int): PageKeyedDataSource<Int, PagedListMovies>
 
     @GET("movie/popular")
     suspend fun loadPopulars(@Query("api_key") apiKey: String,
@@ -21,14 +31,14 @@ interface MoviesService {
                             @Query("page") page: Int,
                             @Query("query") query: String): PagedListMovies
 
+    @GET("movie/{movie_id}")
+    suspend fun loadDetails(@Path("movie_id") idMovie: Long,
+                            @Query("api_key") apiKey: String,
+                            @Query("language") language: String): Movie
+
     @GET("movie/{movie_id}/similar")
     suspend fun searchRelated(@Path("movie_id") idMovie: Long,
                               @Query("api_key") apiKey: String,
                               @Query("language") language: String,
                               @Query("page") page: Int): PagedListMovies
-
-    @GET("movie/{movie_id}")
-    suspend fun loadDetails(@Path("movie_id") idMovie: Long,
-                            @Query("api_key") apiKey: String,
-                            @Query("language") language: String): MovieDetails
 }

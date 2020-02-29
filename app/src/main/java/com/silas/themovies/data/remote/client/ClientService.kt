@@ -8,9 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
- * Startup class of servers that will be used throughout the app.
+ * Initializes the Client that will make service requests for the App
  *
  * @property API_KEY API key for certain service calls
+ *
  * @author silas.silva in 23/02/2020
  * */
 
@@ -19,6 +20,13 @@ class ClientService {
     companion object {
         const val API_KEY = "0d8f3abc66280bdb43792ed1b2719409"
 
+        /**
+         * Create and return a Service of the specified type, with the base request url and create
+         * a Client with this data
+         *
+         * @param url Url base for requests
+         * @return Service specified type
+         */
         internal inline fun <reified T> createNewService(url: String): T {
             return ClientService().setUpService(url)
         }

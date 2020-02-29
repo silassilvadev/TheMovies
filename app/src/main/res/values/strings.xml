@@ -2,7 +2,7 @@
     <string name="app_name">TheMovies</string>
 
     <!-- region ERRORS -->
-    <string name="error_invalid_data">Tente novamente mais tarde</string>
+    <string name="error_service_generic_response">Tente novamente mais tarde</string>
     <!-- endregion -->
 
     <!-- region Toolbar -->
@@ -28,6 +28,7 @@
     <string name="detail_movie_text_popularity_description">%1$s visualizações</string>
     <string name="detail_movie_text_genre">Gênero: %1$s</string>
     <string name="detail_movie_text_release_date">Lançamento: %1$s</string>
+    <string name="detail_movie_text_vote_average">Avaliação: %1$s</string>
     <string name="detail_movie_text_overview_header">Sinopse: </string>
     <string name="detail_movie_favorite_message">Adicionado aos favoritos</string>
     <string name="detail_movie_not_favorite_message">Removido dos favoritos</string>

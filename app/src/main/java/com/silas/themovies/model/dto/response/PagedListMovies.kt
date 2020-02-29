@@ -1,12 +1,20 @@
 package com.silas.themovies.model.dto.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.silas.themovies.model.entity.Movie
-import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
-@Parcelize
-class PagedListMovies(val page: Int,
-                      @SerializedName("total_results") val totalResults: Int,
-                      @SerializedName("total_pages") val totalPages: Int,
-                      val results: List<Movie>) : Parcelable
+data class PagedListMovies(var page: Int = 1,
+                           @SerializedName("total_results") var totalResults: Int = 0,
+                           @SerializedName("total_pages") var totalPages: Int = 1,
+                           var results: ArrayList<Movie>) : Serializable {
+
+    /**
+     * Updates the page and adds the new results delivered by [newPagedListMovies]
+     */
+    fun updatePage(newPagedListMovies: PagedListMovies) {
+        this.page = newPagedListMovies.page
+        this.totalResults = newPagedListMovies.totalResults
+        this.totalPages = newPagedListMovies.totalPages
+        this.results.addAll(newPagedListMovies.results)
+    }
+}

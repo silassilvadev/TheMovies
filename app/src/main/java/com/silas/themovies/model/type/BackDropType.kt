@@ -1,4 +1,4 @@
-package com.silas.themovies.model.entity.type
+package com.silas.themovies.model.type
 
 /**
  * Resolution types in back drop mode
