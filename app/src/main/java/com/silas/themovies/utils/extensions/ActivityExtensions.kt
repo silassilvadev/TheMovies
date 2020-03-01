@@ -62,7 +62,9 @@ fun Activity.addSwipeRefreshRoot(childId: Int, vararg functions: (() -> Unit)?):
     }
 
     return View.inflate(this, childId, swipeRefreshLayout).apply {
-        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT)
     }
 }
 

@@ -26,14 +26,11 @@ import kotlinx.coroutines.*
 class MoviesViewModel(private val repository: MoviesRepository,
                       private val protocol: IProtocolError): ViewModel() {
 
-    private val moviesViewModelJob = SupervisorJob()
-    private val uiScope = CoroutineScope(Dispatchers.Main + moviesViewModelJob)
-
     private lateinit var mutablePagedListMovies: MutableLiveData<PagedListMovies>
 
     override fun onCleared() {
         super.onCleared()
-        moviesViewModelJob.cancel()
+        viewModelScope.cancel()
     }
 
     fun getPopulars(page: Int, query: String = "") =
@@ -46,7 +43,7 @@ class MoviesViewModel(private val repository: MoviesRepository,
         mutablePagedListMovies = MutableLiveData()
         val pagedListMoviesDto = PagedListMoviesDto(page, language)
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                 async { repository.loadPopulars(pagedListMoviesDto) }
             }.onFailure {
@@ -62,7 +59,8 @@ class MoviesViewModel(private val repository: MoviesRepository,
     private fun searchPopulars(query: String, page: Int): MutableLiveData<PagedListMovies> {
         mutablePagedListMovies = MutableLiveData()
         val pagedListMoviesDto = PagedListMoviesDto(page, search = query)
-        uiScope.launch {
+
+        viewModelScope.launch {
             runCatching {
                 async { repository.searchMovie(pagedListMoviesDto) }
             }.onFailure {
@@ -77,7 +75,7 @@ class MoviesViewModel(private val repository: MoviesRepository,
     private fun loadFavorites(): MutableLiveData<PagedListMovies> {
         mutablePagedListMovies = MutableLiveData()
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                 async { repository.loadFavorites() }
             }.onFailure {
@@ -94,7 +92,7 @@ class MoviesViewModel(private val repository: MoviesRepository,
     private fun searchFavorites(query: String): MutableLiveData<PagedListMovies> {
         mutablePagedListMovies = MutableLiveData()
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                repository.searchFavorites(query)
             }.onFailure {

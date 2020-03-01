@@ -1,6 +1,5 @@
 package com.silas.themovies.data.remote.service
 
-import androidx.paging.PageKeyedDataSource
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.model.dto.response.Movie
 import retrofit2.http.GET
@@ -14,11 +13,6 @@ import retrofit2.http.Query
  * @author Silas at 22/02/2020
  */
 interface MoviesService {
-
-    @GET("movie/popular")
-    suspend fun newLoadPopulars(@Query("api_key") apiKey: String,
-                             @Query("language") language: String,
-                             @Query("page") page: Int): PageKeyedDataSource<Int, PagedListMovies>
 
     @GET("movie/popular")
     suspend fun loadPopulars(@Query("api_key") apiKey: String,

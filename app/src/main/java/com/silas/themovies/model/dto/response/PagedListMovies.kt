@@ -8,9 +8,7 @@ data class PagedListMovies(var page: Int = 1,
                            @SerializedName("total_pages") var totalPages: Int = 1,
                            var results: ArrayList<Movie>) : Serializable {
 
-    /**
-     * Updates the page and adds the new results delivered by [newPagedListMovies]
-     */
+    // Updates the page and adds the new results delivered by [newPagedListMovies]
     fun updatePage(newPagedListMovies: PagedListMovies) {
         this.page = newPagedListMovies.page
         this.totalResults = newPagedListMovies.totalResults

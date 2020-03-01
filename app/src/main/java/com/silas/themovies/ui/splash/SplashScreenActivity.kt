@@ -8,6 +8,7 @@ import com.silas.themovies.ui.main.MainActivity
 import com.silas.themovies.utils.extensions.animateFade
 import com.silas.themovies.utils.extensions.startActivity
 import kotlinx.android.synthetic.main.activity_splash_screen.*
+import java.lang.RuntimeException
 
 /**
  * Plays a friendly App loading screen

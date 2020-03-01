@@ -6,7 +6,6 @@ import com.silas.themovies.data.remote.client.ClientService.Companion.API_KEY
  * Object model for requests that need to pass an apiKey
  *
  * @param apiKey Key of the access in API
- * @param language Language of movies searched
  *
  * @author Silas at 23/02/2020
  */

@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit
  *
  * @author silas.silva in 23/02/2020
  * */
-
 class ClientService {
 
     companion object {

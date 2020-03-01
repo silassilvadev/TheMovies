@@ -78,22 +78,18 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
             loadMovies()
             swipe_refresh_layout_movies.isRefreshing = false
         }
-        /**
-         * Listener was used to capture the moment when the user comes close to the end of the list,
-         * and thus load the next page of films
-         */
+
+        // Listener was used to capture the moment when the user comes close to the end of the list,
+        // and thus load the next page of films
         recycler_view_movies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 (recyclerView.layoutManager as? GridLayoutManager)?.apply {
-                    /**
-                     * List update function is only enabled when it is at the top
-                     */
+
+                    // List update function is only enabled when it is at the top
                     swipe_refresh_layout_movies.isEnabled = findFirstVisibleItemPosition() <= 1
 
-                    /**
-                     * Pagination of the list when necessary
-                     */
+                    // Pagination of the list when necessary
                     if (isPaginationNecessary(newState, pagedListMovies)) {
                         loadMovies(currentQuery, currentPage.plus(1))
                     }

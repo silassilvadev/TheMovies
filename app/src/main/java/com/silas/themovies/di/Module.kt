@@ -1,7 +1,6 @@
 package com.silas.themovies.di
 
 import com.silas.themovies.BuildConfig
-import com.silas.themovies.data.local.dao.MoviesDao
 import com.silas.themovies.data.local.database.AppDatabase
 import com.silas.themovies.data.local.database.MoviesDatabase
 import com.silas.themovies.data.remote.client.ClientService

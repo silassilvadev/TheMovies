@@ -29,9 +29,6 @@ import kotlinx.coroutines.*
 class DetailsViewModel(private val repository: MoviesRepository,
                        private val protocol: IProtocolError): ViewModel() {
 
-    private val detailViewModelJob = SupervisorJob()
-    private val uiScope = CoroutineScope(Dispatchers.Main + detailViewModelJob)
-
     private lateinit var mutableMovie: MutableLiveData<Movie>
     private lateinit var mutablePagedListMovies: MutableLiveData<PagedListMovies>
     private lateinit var mutableInsertFavorite: MutableLiveData<List<Long>>
@@ -39,14 +36,14 @@ class DetailsViewModel(private val repository: MoviesRepository,
 
     override fun onCleared() {
         super.onCleared()
-        detailViewModelJob.cancel()
+        viewModelScope.cancel()
     }
 
     fun loadDetails(movieId: Long): MutableLiveData<Movie> {
         mutableMovie = MutableLiveData()
         val movieDetailsDto = MovieDetailsDto(movieId)
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                 async {
                     repository.loadDetails(movieDetailsDto)
@@ -66,7 +63,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
         mutablePagedListMovies = MutableLiveData()
         val pagedListMoviesDto = PagedListMoviesDto(page, language, movieId = movieId)
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                 async { repository.loadRelated(pagedListMoviesDto) }
             }.onFailure {
@@ -81,7 +78,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
     fun saveFavorite(vararg movie: Movie): MutableLiveData<List<Long>> {
         mutableInsertFavorite = MutableLiveData()
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                 async {
                     repository.insertFavorite(*movie)
@@ -98,7 +95,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
     fun removeFavorite(vararg movie: Movie): MutableLiveData<Int> {
         mutableDeleteFavorite = MutableLiveData()
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                 async {
                     repository.deleteFavorite(*movie)
@@ -115,7 +112,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
     fun loadFavoriteId(movieId: Long): MutableLiveData<Movie> {
         mutableMovie = MutableLiveData()
 
-        uiScope.launch {
+        viewModelScope.launch {
             runCatching {
                 async {
                     repository.loadFavoriteId(movieId)
