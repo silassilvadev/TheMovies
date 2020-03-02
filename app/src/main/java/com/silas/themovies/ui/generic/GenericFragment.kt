@@ -1,5 +1,6 @@
 package com.silas.themovies.ui.generic
 
+import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.silas.themovies.R

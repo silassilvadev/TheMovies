@@ -1,5 +1,6 @@
 package com.silas.themovies.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.widget.SearchView

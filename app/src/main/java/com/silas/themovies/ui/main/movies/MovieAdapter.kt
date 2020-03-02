@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.item_movie.view.*
  */
 class MovieAdapter(private var listMovies: ArrayList<Movie>,
                    private var isRelated: Boolean = false,
-                   private val onClickMovie: ((View, Movie) -> Unit)? = null)
+                   private val onClickMovie: ((Int, Movie) -> Unit)? = null)
     : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -62,8 +62,8 @@ class MovieAdapter(private var listMovies: ArrayList<Movie>,
                         itMovie.popularity
                     )
 
-                setOnClickListener { itView ->
-                    onClickMovie?.invoke(itView, itMovie)
+                setOnClickListener {
+                    onClickMovie?.invoke(position, itMovie)
                 }
             }
         }

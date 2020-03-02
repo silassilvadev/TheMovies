@@ -39,6 +39,7 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
 
     private var currentQuery = ""
     private var currentPage = 1
+    private var currentScrollPosition: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -49,10 +50,18 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            initVies()
+            initViews()
             initListeners()
-            loadMovies((it as MainActivity).currentQuery)
         }
+    }
+
+    /**
+     * Due to the constant updating of the API and also the favorites,
+     * the App always updates onResume to always load new changes
+     */
+    override fun onResume() {
+        super.onResume()
+        loadMovies((activity as MainActivity).currentQuery, currentPage)
     }
 
     /**
@@ -68,7 +77,7 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
         if (typeFragment == TypeFragment.POPULARS) getPopulars() else getFavorites()
     }
 
-    private fun initVies(){
+    private fun initViews(){
         swipe_refresh_layout_movies.setColorSchemeColors(requireContext().myGetColor (R.color.colorAccent))
         swipe_refresh_layout_movies.isEnabled = false
     }
@@ -130,13 +139,19 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
     /**
      * Configures recyclerview, a LayoutManager for handling layout changes,
      * and an adapter for handling changes to list items
+     *
+     * [currentScrollPosition] Clicked position saved, to ensure that when returning to the screen
+     * the user will scroll to the previous position
      */
     private fun setUpRecyclerView() {
-        recycler_view_movies.layoutManager = GridLayoutManager(activity, 2)
-        moviesAdapter = MovieAdapter(pagedListMovies.results) { _, movie ->
-            startActivity<DetailMovieActivity>(MainActivity.KEY_MOVIE to movie)
-        }.apply {
-            recycler_view_movies.adapter = this
+        recycler_view_movies.apply {
+            layoutManager = GridLayoutManager(activity, 2)
+            moviesAdapter = MovieAdapter(pagedListMovies.results) { position, movie ->
+                currentScrollPosition = position - 1
+                startActivity<DetailMovieActivity>(MainActivity.KEY_MOVIE to movie)
+            }
+            adapter = moviesAdapter
+            scrollToPosition(currentScrollPosition)
         }
     }
 }

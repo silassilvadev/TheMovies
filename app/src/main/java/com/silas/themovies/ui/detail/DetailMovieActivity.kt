@@ -40,6 +40,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
     private lateinit var pagedListRelated: PagedListMovies
     private lateinit var relatedAdapter: MovieAdapter
     private var currentPageRelated = 1
+    private var isUpdatingFavorites = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,9 +120,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
     }
 
     private fun loadRelated() {
-        showProgress()
         detailsViewModel.loadRelated(currentPageRelated, movieDetails.id).observe(this, Observer {
-            hideProgress()
             if (currentPageRelated > 1) {
                 this.pagedListRelated.updatePage(it)
                 this.relatedAdapter.notifyDataSetChanged()
@@ -141,6 +140,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
                 Snackbar.make(coordinator_layout_detail_movie,
                     getString(R.string.detail_movie_favorite_message),
                     Snackbar.LENGTH_SHORT).show()
+                isUpdatingFavorites = true
             })
         } else {
             detailsViewModel.removeFavorite(movieDetails).observe(this, Observer {
@@ -149,6 +149,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
                 Snackbar.make(coordinator_layout_detail_movie,
                     getString(R.string.detail_movie_not_favorite_message),
                     Snackbar.LENGTH_SHORT).show()
+                isUpdatingFavorites = true
             })
         }
     }
