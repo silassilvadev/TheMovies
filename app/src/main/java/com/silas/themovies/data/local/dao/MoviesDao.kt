@@ -2,6 +2,7 @@ package com.silas.themovies.data.local.dao
 
 import androidx.room.*
 import com.silas.themovies.model.dto.response.Movie
+import kotlinx.coroutines.Deferred
 
 /**
  * Here, queries to local data are mounted, and requested from the database
@@ -14,6 +15,9 @@ interface MoviesDao {
     @Query("SELECT * FROM Favorite")
     suspend fun loadFavorites(): List<Movie>
 
+    @Query("SELECT * FROM Favorite WHERE title LIKE '%' || :query || '%'")
+    suspend fun searchFavorites(query: String): List<Movie>
+
     @Query("SELECT * FROM Favorite WHERE id = :movieId")
     suspend fun loadFavoriteId(movieId: Long): Movie
 
@@ -22,7 +26,4 @@ interface MoviesDao {
 
     @Delete
     suspend fun deleteFavorite(vararg movie: Movie): Int
-
-    @Query("SELECT * FROM Favorite WHERE title LIKE '%' || :query || '%'")
-    suspend fun searchFavorites(query: String): List<Movie>
 }

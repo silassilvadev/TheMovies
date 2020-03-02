@@ -45,9 +45,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async {
-                    repository.loadDetails(movieDetailsDto)
-                }
+                repository.loadDetailsAsync(movieDetailsDto)
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
             }.onSuccess {
@@ -65,7 +63,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async { repository.loadRelated(pagedListMoviesDto) }
+                repository.loadRelatedAsync(pagedListMoviesDto)
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
             }.onSuccess {
@@ -80,9 +78,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async {
-                    repository.insertFavorite(*movie)
-                }
+                repository.insertFavoriteAsync(*movie)
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
             }.onSuccess {
@@ -97,9 +93,7 @@ class DetailsViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async {
-                    repository.deleteFavorite(*movie)
-                }
+                repository.deleteFavoriteAsync(*movie)
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
             }.onSuccess {
@@ -114,15 +108,11 @@ class DetailsViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async {
-                    repository.loadFavoriteId(movieId)
-                }
+                repository.loadFavoriteIdAsync(movieId)
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
-            }.onSuccess { itDeferred ->
-                itDeferred.await().let {
-                    mutableMovie.postValue(it)
-                }
+            }.onSuccess {
+                mutableMovie.postValue(it.await())
             }
         }
         return mutableMovie
