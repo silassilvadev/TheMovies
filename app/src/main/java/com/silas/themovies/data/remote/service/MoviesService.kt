@@ -2,6 +2,8 @@ package com.silas.themovies.data.remote.service
 
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.model.dto.response.Movie
+import kotlinx.coroutines.Deferred
+
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -20,10 +22,10 @@ interface MoviesService {
                              @Query("page") page: Int): PagedListMovies
 
     @GET("search/movie")
-    suspend fun searchMovie(@Query("api_key") apiKey: String,
-                            @Query("language") language: String,
-                            @Query("page") page: Int,
-                            @Query("query") query: String): PagedListMovies
+    suspend fun searchPopulars(@Query("api_key") apiKey: String,
+                               @Query("language") language: String,
+                               @Query("page") page: Int,
+                               @Query("query") query: String): PagedListMovies
 
     @GET("movie/{movie_id}")
     suspend fun loadDetails(@Path("movie_id") idMovie: Long,

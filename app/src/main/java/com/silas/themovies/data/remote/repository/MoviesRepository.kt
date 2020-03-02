@@ -21,38 +21,56 @@ import kotlinx.coroutines.withContext
 class MoviesRepository(private val service: MoviesService, private val moviesDao: MoviesDao) {
 
     suspend fun loadPopulars(pagedListMoviesDto: PagedListMoviesDto) =
-        service.loadPopulars(
-            pagedListMoviesDto.apiKey,
-            pagedListMoviesDto.language,
-            pagedListMoviesDto.page)
+        withContext(Dispatchers.IO) {
+            service.loadPopulars(
+                pagedListMoviesDto.apiKey,
+                pagedListMoviesDto.language,
+                pagedListMoviesDto.page
+            )
+        }
 
-    suspend fun searchMovie(pagedListMovies: PagedListMoviesDto) =
-        service.searchMovie(
-            pagedListMovies.apiKey,
-            pagedListMovies.language,
-            pagedListMovies.page,
-            pagedListMovies.search ?: "")
+
+    suspend fun searchPopulars(pagedListMovies: PagedListMoviesDto) =
+        withContext(Dispatchers.IO) {
+            service.searchPopulars(
+                pagedListMovies.apiKey,
+                pagedListMovies.language,
+                pagedListMovies.page,
+                pagedListMovies.search ?: ""
+            )
+        }
 
     suspend fun loadDetails(movieDetails: MovieDetailsDto) =
-        service.loadDetails(
-            movieDetails.idMovie,
-            movieDetails.apiKey,
-            movieDetails.language)
+        withContext(Dispatchers.IO) {
+            service.loadDetails(
+                movieDetails.idMovie,
+                movieDetails.apiKey,
+                movieDetails.language
+            )
+        }
 
     suspend fun loadRelated(pagedListMovies: PagedListMoviesDto) =
-        service.searchRelated(
-            pagedListMovies.movieId,
-            pagedListMovies.apiKey,
-            pagedListMovies.language,
-            pagedListMovies.page)
+        withContext(Dispatchers.IO) {
+            service.searchRelated(
+                pagedListMovies.movieId,
+                pagedListMovies.apiKey,
+                pagedListMovies.language,
+                pagedListMovies.page
+            )
+        }
 
-    suspend fun insertFavorite(vararg movie: Movie) = moviesDao.insertFavorite(*movie)
+    suspend fun insertFavorite(vararg movie: Movie) =
+        withContext(Dispatchers.IO) {moviesDao.insertFavorite(*movie) }
 
-    suspend fun deleteFavorite(vararg movie: Movie)  = moviesDao.deleteFavorite(*movie)
+    suspend fun deleteFavorite(vararg movie: Movie)  =
+        withContext(Dispatchers.IO) {moviesDao.deleteFavorite(*movie) }
 
-    suspend fun loadFavoriteId(movieId: Long)  = moviesDao.loadFavoriteId(movieId)
+    suspend fun loadFavoriteId(movieId: Long)  =
+        withContext(Dispatchers.IO) {moviesDao.loadFavoriteId(movieId) }
 
-    suspend fun loadFavorites()  = moviesDao.loadFavorites()
+    suspend fun loadFavorites()  =
+        withContext(Dispatchers.IO) { moviesDao.loadFavorites() }
 
-    suspend fun searchFavorites(query: String)  = moviesDao.searchFavorites(query)
+    suspend fun searchFavorites(query: String)  =
+        withContext(Dispatchers.IO) { moviesDao.searchFavorites(query) }
 }

@@ -45,11 +45,11 @@ class MoviesViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async { repository.loadPopulars(pagedListMoviesDto) }
+                repository.loadPopulars(pagedListMoviesDto)
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
             }.onSuccess {
-                mutablePagedListMovies.postValue(it.await())
+                mutablePagedListMovies.postValue(it)
             }
         }
 
@@ -62,11 +62,11 @@ class MoviesViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async { repository.searchMovie(pagedListMoviesDto) }
+                repository.searchPopulars(pagedListMoviesDto)
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
             }.onSuccess {
-                mutablePagedListMovies.postValue(it.await())
+                mutablePagedListMovies.postValue(it)
             }
         }
         return mutablePagedListMovies
@@ -77,11 +77,11 @@ class MoviesViewModel(private val repository: MoviesRepository,
 
         viewModelScope.launch {
             runCatching {
-                async { repository.loadFavorites() }
+                repository.loadFavorites()
             }.onFailure {
                 protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
             }.onSuccess {
-                val movies = it.await() as ArrayList<Movie>
+                val movies = it as ArrayList<Movie>
                 val pagedListMovies = PagedListMovies(totalResults = movies.size, results = movies)
                 mutablePagedListMovies.postValue(pagedListMovies)
             }
