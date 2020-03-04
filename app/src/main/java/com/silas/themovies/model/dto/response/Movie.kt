@@ -1,13 +1,16 @@
 package com.silas.themovies.model.dto.response
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.silas.themovies.model.dto.response.Genre
+import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
+@Parcelize
 @Entity(tableName = "Favorite")
 data class Movie(@PrimaryKey(autoGenerate = true)
                  @ColumnInfo(name = "id")
@@ -42,4 +45,4 @@ data class Movie(@PrimaryKey(autoGenerate = true)
                  val endPointPosterPath: String,
 
                  @ColumnInfo(name = "has_favorite")
-                 var hasFavorite: Boolean): Serializable
+                 var hasFavorite: Boolean): Parcelable

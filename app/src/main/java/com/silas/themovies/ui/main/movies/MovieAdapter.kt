@@ -10,7 +10,6 @@ import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.type.BackDropType
 import com.silas.themovies.model.type.PosterPathType
 import com.silas.themovies.utils.extensions.myGetColor
-import com.silas.themovies.utils.extensions.myGetDrawable
 import com.silas.themovies.utils.extensions.setUpImage
 import kotlinx.android.synthetic.main.item_movie.view.*
 
@@ -67,16 +66,6 @@ class MovieAdapter(private var listMovies: ArrayList<Movie>,
                 }
             }
         }
-    }
-
-    /**
-     * Used to update items in the paged list when new items have been loaded
-     *
-     * @param movies Contains the new films to be added to the list
-     */
-    internal fun updateMovies(movies: ArrayList<Movie>) {
-        listMovies.addAll(movies)
-        notifyDataSetChanged()
     }
 
     class MovieViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)

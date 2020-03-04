@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.silas.themovies.R
+import com.silas.themovies.model.dto.response.Genre
 import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.model.type.BackDropType
@@ -60,8 +61,8 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
     }
 
     private fun isReceiveParams(): Boolean {
-        return intent.getSerializableExtra(KEY_MOVIE)?.let {
-            movieDetails = it as Movie
+        return intent.getParcelableExtra<Movie>(KEY_MOVIE)?.let {
+            movieDetails = it
             true
         } ?: run { false }
     }
@@ -100,7 +101,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
         text_view_detail_movie_popularity.text =
             getString(R.string.detail_movie_text_popularity_description,  movieDetails.popularity)
         text_view_detail_movie_release_date.text =
-            getString(R.string.detail_movie_text_release_date, movieDetails.releaseDate.simpleMaskDate())
+            getString(R.string.detail_movie_text_release_date, movieDetails.releaseDate.formatDate())
         movieDetails.genres?.let {
             text_view_detail_movie_genre.text =
                 getString(R.string.detail_movie_text_genre, it.convertInTextList())

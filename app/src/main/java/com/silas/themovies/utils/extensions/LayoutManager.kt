@@ -1,5 +1,6 @@
 package com.silas.themovies.utils.extensions
 
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.silas.themovies.model.dto.response.PagedListMovies
@@ -7,6 +8,8 @@ import com.silas.themovies.model.dto.response.PagedListMovies
 /**
  * [RecyclerView.SCROLL_STATE_IDLE] was used so that the list is updated
  * only when the scrolling ends and avoid 2 simultaneous calls
+ *
+ * Note: Implementation for [LinearLayoutManager]
  */
 fun LinearLayoutManager.isPaginationNecessary(stateRecyclerView: Int,
                                               pagedListMovies: PagedListMovies): Boolean {
@@ -14,4 +17,16 @@ fun LinearLayoutManager.isPaginationNecessary(stateRecyclerView: Int,
             && pagedListMovies.page < pagedListMovies.totalPages
             && itemCount <= pagedListMovies.totalResults
             && findLastVisibleItemPosition() > (itemCount - 2)
+}
+
+
+/**
+ * [RecyclerView.SCROLL_STATE_IDLE] was used so that the list is updated
+ * only when the scrolling ends and avoid 2 simultaneous calls
+ *
+ * Note: Implementation for [GridLayoutManager]
+ */
+fun GridLayoutManager.isPaginationNecessary(stateRecyclerView: Int,
+                                            pagedListMovies: PagedListMovies): Boolean {
+    return (this as? LinearLayoutManager)?.isPaginationNecessary(stateRecyclerView, pagedListMovies) ?: false
 }

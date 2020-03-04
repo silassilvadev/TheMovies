@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.silas.themovies.R
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.ui.detail.DetailMovieActivity
@@ -33,6 +34,8 @@ import org.koin.android.ext.android.inject
  */
 class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment() {
 
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
     private val moviesViewModel by inject<MoviesViewModel>()
     private lateinit var moviesAdapter: MovieAdapter
     private lateinit var pagedListMovies: PagedListMovies
@@ -44,13 +47,15 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_movies, container, false)
+        this.swipeRefreshLayout = addSwipeRefreshRoot(R.layout.fragment_movies, {
+            loadMovies()
+        }) as SwipeRefreshLayout
+        return this.swipeRefreshLayout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            initViews()
             initListeners()
         }
     }
@@ -77,15 +82,10 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
         if (typeFragment == TypeFragment.POPULARS) getPopulars() else getFavorites()
     }
 
-    private fun initViews(){
-        swipe_refresh_layout_movies.setColorSchemeColors(requireContext().myGetColor (R.color.colorAccent))
-        swipe_refresh_layout_movies.isEnabled = false
-    }
-
     private fun initListeners(){
-        swipe_refresh_layout_movies.setOnRefreshListener {
+        this.swipeRefreshLayout.setOnRefreshListener {
             loadMovies()
-            swipe_refresh_layout_movies.isRefreshing = false
+            this.swipeRefreshLayout.isRefreshing = false
         }
 
         // Listener was used to capture the moment when the user comes close to the end of the list,
@@ -96,7 +96,7 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
                 (recyclerView.layoutManager as? GridLayoutManager)?.apply {
 
                     // List update function is only enabled when it is at the top
-                    swipe_refresh_layout_movies.isEnabled = findFirstVisibleItemPosition() <= 1
+                    this@MoviesFragment.swipeRefreshLayout.isEnabled = findFirstVisibleItemPosition() <= 1
 
                     // Pagination of the list when necessary
                     if (isPaginationNecessary(newState, pagedListMovies)) {
@@ -111,9 +111,10 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
      * Request a list of popular movies for ViewModel
      */
     private fun getPopulars() {
-        showProgress()
+        if (currentPage == 1 && currentQuery.isBlank()) showProgress()
         moviesViewModel.getPopulars(currentPage, currentQuery).observe(viewLifecycleOwner, Observer {
             hideProgress()
+
             if (currentPage > 1) {
                 this.pagedListMovies.updatePage(it)
                 this.moviesAdapter.notifyDataSetChanged()
