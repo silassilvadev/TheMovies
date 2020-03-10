@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import com.silas.themovies.R
-import com.silas.themovies.ui.IProtocolError
+import com.silas.themovies.ui.IViewProtocol
 import com.silas.themovies.ui.main.MainActivity
 import com.silas.themovies.utils.extensions.animateTransition
 import com.silas.themovies.utils.extensions.getContentView
@@ -18,7 +18,7 @@ import com.silas.themovies.utils.extensions.hideProgress
  * @sample GenericActivity class YourActivity: GenericActivity() { ... }
  * @author Silas at 27/02/2020
  */
-open class GenericActivity: AppCompatActivity(), IProtocolError {
+open class GenericActivity: AppCompatActivity(), IViewProtocol {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -14,21 +14,19 @@ import java.util.concurrent.TimeUnit
  *
  * @author silas.silva in 23/02/2020
  * */
-class ClientService {
+object ClientService {
 
-    companion object {
-        const val API_KEY = "0d8f3abc66280bdb43792ed1b2719409"
+    const val API_KEY = "0d8f3abc66280bdb43792ed1b2719409"
 
-        /**
-         * Create and return a Service of the specified type, with the base request url and create
-         * a Client with this data
-         *
-         * @param url Url base for requests
-         * @return Service specified type
-         */
-        internal inline fun <reified T> createNewService(url: String): T {
-            return ClientService().setUpService(url)
-        }
+    /**
+     * Create and return a Service of the specified type, with the base request url and create
+     * a Client with this data
+     *
+     * @param url Url base for requests
+     * @return Service specified type
+     */
+    internal inline fun <reified T> createNewService(url: String): T {
+        return setUpService(url)
     }
 
     /**

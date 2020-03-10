@@ -2,8 +2,6 @@ package com.silas.themovies.data.remote.service
 
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.model.dto.response.Movie
-import kotlinx.coroutines.Deferred
-
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

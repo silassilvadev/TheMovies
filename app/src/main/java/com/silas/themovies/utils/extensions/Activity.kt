@@ -71,7 +71,7 @@ fun Activity.addSwipeRefreshRoot(childId: Int, vararg functions: (() -> Unit)?):
 /**
  * @return Content View
  */
-fun Activity.getContentView(): ViewGroup = findViewById(R.id.content)
+fun Activity.getContentView(): ViewGroup = findViewById(android.R.id.content)
 
 // region AppCompatActivity
 /**

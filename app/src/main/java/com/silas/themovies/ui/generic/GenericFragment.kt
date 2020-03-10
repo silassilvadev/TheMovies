@@ -1,27 +1,24 @@
 package com.silas.themovies.ui.generic
 
-import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.silas.themovies.R
-import com.silas.themovies.ui.IProtocolError
+import com.silas.themovies.ui.IViewProtocol
 import com.silas.themovies.utils.extensions.getContentView
-import com.silas.themovies.utils.extensions.hideProgress
 
 /**
- * Is a generic class, for generic actions, as for example error messages
+ * Is a generic class, for generic actions, as for example error messages and animations execute
  *
  * @sample GenericFragment class YourFragment: GenericFragment() { ... }
- * @author Silas at 27/02/2020
+ * @author Silas at 10/03/2020
  */
-open class GenericFragment: Fragment(), IProtocolError {
+open class GenericFragment: Fragment(), IViewProtocol {
 
     override fun onResponseError(message: String) {
-        hideProgress()
-        activity?.let {
-            val correctMessage =
-                if (message.isBlank()) getString(R.string.error_service_generic_response) else message
-            Snackbar.make(it.getContentView(), correctMessage, Snackbar.LENGTH_SHORT).show()
+        val correctMessage =
+            if (message.isBlank()) getString(R.string.error_service_generic_response) else message
+        activity?.apply {
+            Snackbar.make(getContentView(), correctMessage, Snackbar.LENGTH_SHORT).show()
         }
     }
 }

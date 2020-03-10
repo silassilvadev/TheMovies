@@ -8,7 +8,7 @@ import com.silas.themovies.model.dto.request.PagedListMoviesDto
 import com.silas.themovies.model.dto.request.PagedListMoviesDto.Companion.PT_BR
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.model.dto.response.Movie
-import com.silas.themovies.ui.IProtocolError
+import com.silas.themovies.ui.IViewProtocol
 import kotlinx.coroutines.*
 
 /**
@@ -24,7 +24,7 @@ import kotlinx.coroutines.*
  * @author Silas at 22/02/2020
  */
 class MoviesViewModel(private val repository: MoviesRepository,
-                      private val protocol: IProtocolError): ViewModel() {
+                      private val protocol: IViewProtocol): ViewModel() {
 
     private lateinit var mutablePagedListMovies: MutableLiveData<PagedListMovies>
 

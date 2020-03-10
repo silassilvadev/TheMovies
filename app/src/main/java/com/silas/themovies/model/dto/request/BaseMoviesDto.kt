@@ -1,6 +1,6 @@
 package com.silas.themovies.model.dto.request
 
-import com.silas.themovies.data.remote.client.ClientService.Companion.API_KEY
+import com.silas.themovies.data.remote.client.ClientService.API_KEY
 
 /**
  * Object model for requests that need to pass an apiKey

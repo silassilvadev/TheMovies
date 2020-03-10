@@ -15,7 +15,8 @@ import com.silas.themovies.ui.generic.GenericFragment
 import com.silas.themovies.ui.main.MainActivity
 import com.silas.themovies.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_movies.*
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * Dynamic filling class, responsible for showing a list of films to the user,
@@ -36,7 +37,9 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    private val moviesViewModel by inject<MoviesViewModel>()
+    private val moviesViewModel by viewModel<MoviesViewModel> {
+        parametersOf(this)
+    }
     private lateinit var moviesAdapter: MovieAdapter
     private lateinit var pagedListMovies: PagedListMovies
 
@@ -55,9 +58,7 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            initListeners()
-        }
+        initListeners()
     }
 
     /**
@@ -66,7 +67,9 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
      */
     override fun onResume() {
         super.onResume()
-        loadMovies((activity as MainActivity).currentQuery, currentPage)
+        (requireActivity() as? MainActivity)?.apply {
+            loadMovies(currentQuery, currentPage)
+        }
     }
 
     /**
@@ -114,7 +117,6 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
         if (currentPage == 1 && currentQuery.isBlank()) showProgress()
         moviesViewModel.getPopulars(currentPage, currentQuery).observe(viewLifecycleOwner, Observer {
             hideProgress()
-
             if (currentPage > 1) {
                 this.pagedListMovies.updatePage(it)
                 this.moviesAdapter.notifyDataSetChanged()
@@ -122,6 +124,7 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
                 this.pagedListMovies = it
                 setUpRecyclerView()
             }
+            if (it.results.isEmpty()) onResponseError(getString(R.string.error_empty_list_movies))
         })
     }
 
@@ -134,6 +137,7 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
             hideProgress()
             pagedListMovies = it
             setUpRecyclerView()
+            if (pagedListMovies.results.isEmpty()) onResponseError(getString(R.string.error_empty_favorite_movies))
         })
     }
 
@@ -146,7 +150,7 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
      */
     private fun setUpRecyclerView() {
         recycler_view_movies.apply {
-            layoutManager = GridLayoutManager(activity, 2)
+            layoutManager = GridLayoutManager(requireActivity(), 2)
             moviesAdapter = MovieAdapter(pagedListMovies.results) { position, movie ->
                 currentScrollPosition = position - 1
                 startActivity<DetailMovieActivity>(MainActivity.KEY_MOVIE to movie)

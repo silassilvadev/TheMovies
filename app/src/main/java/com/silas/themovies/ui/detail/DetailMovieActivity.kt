@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.silas.themovies.R
-import com.silas.themovies.model.dto.response.Genre
 import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.model.type.BackDropType
@@ -18,7 +17,8 @@ import com.silas.themovies.ui.main.movies.MovieAdapter
 import com.silas.themovies.utils.extensions.*
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 import kotlinx.android.synthetic.main.activity_detail_movie.text_view_detail_movie_popularity
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * After selecting a movie to view details, this class goes into action to search for details,
@@ -35,7 +35,9 @@ import org.koin.android.ext.android.inject
 
 class DetailMovieActivity : GenericActivity(), View.OnClickListener {
 
-    private val detailsViewModel by inject<DetailsViewModel>()
+    private val detailsViewModel by viewModel<DetailsViewModel> {
+        parametersOf(this)
+    }
     private lateinit var movieDetails: Movie
 
     private lateinit var pagedListRelated: PagedListMovies

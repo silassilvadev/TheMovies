@@ -1,9 +1,6 @@
 package com.silas.themovies.utils.extensions
 
-import android.util.Log
 import java.lang.Exception
-import java.text.DateFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 

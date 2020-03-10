@@ -3,11 +3,6 @@ package com.silas.themovies.utils.extensions
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.mockito.internal.matchers.Matches
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class StringKtTest {
 

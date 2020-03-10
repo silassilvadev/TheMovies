@@ -1,4 +1,5 @@
 package com.silas.themovies.model.type
+
 /**
  * Resolution types in poster path mode
  *

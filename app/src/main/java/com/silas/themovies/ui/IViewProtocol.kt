@@ -5,6 +5,6 @@ package com.silas.themovies.ui
  *
  * @author Silas at 25/02/2020
  */
-interface IProtocolError {
+interface IViewProtocol {
     fun onResponseError(message: String)
 }

@@ -2,7 +2,6 @@ package com.silas.themovies.ui.movies
 
 import androidx.lifecycle.MutableLiveData
 import com.silas.themovies.model.BaseMoviesTest
-import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.ui.main.movies.MoviesViewModel
 import io.mockk.*

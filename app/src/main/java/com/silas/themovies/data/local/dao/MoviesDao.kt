@@ -2,7 +2,6 @@ package com.silas.themovies.data.local.dao
 
 import androidx.room.*
 import com.silas.themovies.model.dto.response.Movie
-import kotlinx.coroutines.Deferred
 
 /**
  * Here, queries to local data are mounted, and requested from the database
