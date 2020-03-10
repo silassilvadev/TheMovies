@@ -9,4 +9,5 @@ import com.silas.themovies.data.remote.client.ClientService.API_KEY
  *
  * @author Silas at 23/02/2020
  */
-abstract class BaseMoviesDto(val apiKey: String = API_KEY)
+abstract class BaseMoviesDto(val apiKey: String = API_KEY,
+                             val language: String = "PT_BR")

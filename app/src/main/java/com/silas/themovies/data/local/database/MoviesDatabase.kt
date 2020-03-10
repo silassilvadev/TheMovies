@@ -2,7 +2,6 @@ package com.silas.themovies.data.local.database
 
 import android.content.Context
 import androidx.room.Room
-import com.silas.themovies.data.local.database.AppDatabase.Companion.DATABASE_NAME
 
 /**
  * Creates a database object for local data storage
@@ -14,6 +13,7 @@ import com.silas.themovies.data.local.database.AppDatabase.Companion.DATABASE_NA
 object  MoviesDatabase {
     @Volatile
     private lateinit var database: AppDatabase
+    private const val DATABASE_NAME = "movies-db"
 
     fun instance(context: Context): AppDatabase {
         synchronized(this) {

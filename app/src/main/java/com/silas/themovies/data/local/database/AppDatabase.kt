@@ -13,8 +13,4 @@ import com.silas.themovies.model.dto.response.Movie
 @Database(entities = [Movie::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun movieDao(): MoviesDao
-
-    companion object {
-        const val DATABASE_NAME = "movies-db"
-    }
 }

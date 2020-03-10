@@ -55,11 +55,9 @@ class DetailsViewModel(private val repository: MoviesRepository,
         return mutableMovie
     }
 
-    fun loadRelated(page: Int,
-                    movieId: Long,
-                    language: String = PagedListMoviesDto.PT_BR): MutableLiveData<PagedListMovies> {
+    fun loadRelated(page: Int, movieId: Long): MutableLiveData<PagedListMovies> {
         mutablePagedListMovies = MutableLiveData()
-        val pagedListMoviesDto = PagedListMoviesDto(page, language, movieId = movieId)
+        val pagedListMoviesDto = PagedListMoviesDto(page, movieId = movieId)
 
         viewModelScope.launch {
             runCatching {

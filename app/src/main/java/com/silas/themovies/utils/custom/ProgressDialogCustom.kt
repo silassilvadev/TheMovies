@@ -24,15 +24,14 @@ import java.util.*
  *
  * @author silas.silva 23/02/2020
  * */
-
 class ProgressDialogCustom : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         isCancelable = false
         return AlertDialog.Builder(Objects.requireNonNull<FragmentActivity>(activity))
-                .setView(activity
-                        ?.layoutInflater
-                        ?.inflate(R.layout.custom_progress_dialog, activity?.contentScene?.sceneRoot))
+                .setView(requireActivity()
+                        .layoutInflater
+                        .inflate(R.layout.custom_progress_dialog, requireActivity().contentScene?.sceneRoot))
                 .create()
     }
 
@@ -50,7 +49,7 @@ class ProgressDialogCustom : DialogFragment() {
      * */
     fun show(manager: FragmentManager) {
         try {
-            if (show || dialog != null && dialog!!.isShowing) return
+            if (show || dialog != null && dialog?.isShowing == true) return
             show = true
             super.show(manager, TAG)
         } catch (exception: IllegalStateException) {
@@ -77,10 +76,11 @@ class ProgressDialogCustom : DialogFragment() {
 
         val instance: ProgressDialogCustom
             @Synchronized get() {
-                if (progressDialogCustom == null) {
-                    progressDialogCustom = ProgressDialogCustom()
+                return progressDialogCustom ?: run {
+                    ProgressDialogCustom().apply {
+                        progressDialogCustom = this
+                    }
                 }
-                return progressDialogCustom!!
             }
     }
 }

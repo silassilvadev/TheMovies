@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.silas.themovies.data.remote.repository.MoviesRepository
 import com.silas.themovies.model.dto.request.PagedListMoviesDto
-import com.silas.themovies.model.dto.request.PagedListMoviesDto.Companion.PT_BR
 import com.silas.themovies.model.dto.response.PagedListMovies
 import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.ui.IViewProtocol
@@ -39,9 +38,9 @@ class MoviesViewModel(private val repository: MoviesRepository,
     fun getFavorites(query: String) =
         if (query.isBlank()) loadFavorites() else searchFavorites(query)
 
-    private fun loadPopulars(page: Int, language: String = PT_BR): MutableLiveData<PagedListMovies> {
+    private fun loadPopulars(page: Int): MutableLiveData<PagedListMovies> {
         mutablePagedListMovies = MutableLiveData()
-        val pagedListMoviesDto = PagedListMoviesDto(page, language)
+        val pagedListMoviesDto = PagedListMoviesDto(page)
 
         viewModelScope.launch {
             runCatching {
