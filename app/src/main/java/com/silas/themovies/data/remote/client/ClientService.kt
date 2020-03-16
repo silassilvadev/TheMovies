@@ -22,21 +22,11 @@ object ClientService {
      * Create and return a Service of the specified type, with the base request url and create
      * a Client with this data
      *
-     * @param url Url base for requests
-     * @return Service specified type
-     */
-    internal inline fun <reified T> createNewService(url: String): T {
-        return setUpService(url)
-    }
-
-    /**
-     * Method where services are configured
-     *
      * @param T type that specifies the service to be configured
      * @param url url base for service flames
      * @return return of requested service type already configured
      * */
-    internal inline fun <reified T> setUpService(url: String): T {
+    internal inline fun <reified T> createNewService(url: String): T {
         return Retrofit.Builder()
             .baseUrl(url)
             .client(setUpClientHttp())
