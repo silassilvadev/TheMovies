@@ -12,9 +12,9 @@ import com.silas.themovies.utils.extensions.getContentView
  * @sample GenericFragment class YourFragment: GenericFragment() { ... }
  * @author Silas at 10/03/2020
  */
-open class GenericFragment: Fragment(), IViewProtocol {
+open class GenericFragment: Fragment() {
 
-    override fun onResponseError(message: String) {
+    internal fun onMessage(message: String) {
         val correctMessage =
             if (message.isBlank()) getString(R.string.error_service_generic_response) else message
         activity?.apply {

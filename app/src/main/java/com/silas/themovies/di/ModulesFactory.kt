@@ -24,14 +24,9 @@ object ModulesFactory {
         single<MoviesService> { ClientService.createNewService(BuildConfig.THE_MOVIES_URL) }
     }
 
-    /** [IViewProtocol] Parameter used to return error messages when trying to perform an action */
     private val viewModelModule = module {
-        viewModel { (protocol: IViewProtocol) ->
-            MoviesViewModel(get(), protocol)
-        }
-        viewModel { (protocol: IViewProtocol) ->
-            DetailsViewModel(get(),protocol)
-        }
+        viewModel { MoviesViewModel(get()) }
+        viewModel { DetailsViewModel(get()) }
     }
 
     private val repositoryModule = module {

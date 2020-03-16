@@ -1,13 +1,14 @@
 package com.silas.themovies.ui.main.movies
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.silas.themovies.data.remote.repository.MoviesRepository
 import com.silas.themovies.model.dto.request.PagedListMoviesDto
-import com.silas.themovies.model.dto.response.PagedListMovies
+import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.model.dto.response.Movie
-import com.silas.themovies.ui.IViewProtocol
+import com.silas.themovies.ui.LoadingState
 import kotlinx.coroutines.*
 
 /**
@@ -15,17 +16,22 @@ import kotlinx.coroutines.*
  * and returning them when they are available.
  *
  * @param repository Single repository instance that will decide where to get the requested data
- * @param protocol Single instance of error message return protocol to UI
- * @property mutablePagedListMovies The properties of this class do basically the same thing
+ * @property pagedMoviesMutableLiveData The properties of this class do basically the same thing
  * as returning the response expected by the UI
  * @property viewModelScope Scope of request execution
  *
  * @author Silas at 22/02/2020
  */
-class MoviesViewModel(private val repository: MoviesRepository,
-                      private val protocol: IViewProtocol): ViewModel() {
+class MoviesViewModel(private val repository: MoviesRepository): ViewModel() {
 
-    private lateinit var mutablePagedListMovies: MutableLiveData<PagedListMovies>
+    private val pagedMoviesMutableLiveData = MutableLiveData<PagedMovies>()
+    val pagedMoviesLiveData: LiveData<PagedMovies> get() = pagedMoviesMutableLiveData
+
+    private val errorMutableLiveData = MutableLiveData<String>()
+    val errorLiveData: LiveData<String> get() = errorMutableLiveData
+
+    private val loadingMutableLiveData = MutableLiveData<LoadingState>()
+    val loadingLiveData: LiveData<LoadingState> get() = loadingMutableLiveData
 
     override fun onCleared() {
         super.onCleared()
@@ -38,69 +44,70 @@ class MoviesViewModel(private val repository: MoviesRepository,
     fun getFavorites(query: String) =
         if (query.isBlank()) loadFavorites() else searchFavorites(query)
 
-    private fun loadPopulars(page: Int): MutableLiveData<PagedListMovies> {
-        mutablePagedListMovies = MutableLiveData()
+    private fun loadPopulars(page: Int) {
         val pagedListMoviesDto = PagedListMoviesDto(page)
 
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.loadPopulars(pagedListMoviesDto)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                mutablePagedListMovies.postValue(it)
+                loadingMutableLiveData.value = LoadingState.HIDE
+                pagedMoviesMutableLiveData.postValue(it)
             }
         }
-
-        return mutablePagedListMovies
     }
 
-    private fun searchPopulars(query: String, page: Int): MutableLiveData<PagedListMovies> {
-        mutablePagedListMovies = MutableLiveData()
+    private fun searchPopulars(query: String, page: Int) {
         val pagedListMoviesDto = PagedListMoviesDto(page, search = query)
 
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.searchPopulars(pagedListMoviesDto)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                mutablePagedListMovies.postValue(it)
+                loadingMutableLiveData.value = LoadingState.HIDE
+                pagedMoviesMutableLiveData.postValue(it)
             }
         }
-        return mutablePagedListMovies
     }
 
-    private fun loadFavorites(): MutableLiveData<PagedListMovies> {
-        mutablePagedListMovies = MutableLiveData()
-
+    private fun loadFavorites() {
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.loadFavorites()
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
+                loadingMutableLiveData.value = LoadingState.HIDE
                 val movies = it as ArrayList<Movie>
-                val pagedListMovies = PagedListMovies(totalResults = movies.size, results = movies)
-                mutablePagedListMovies.postValue(pagedListMovies)
+                val pagedListMovies = PagedMovies(totalResults = movies.size, results = movies)
+                pagedMoviesMutableLiveData.postValue(pagedListMovies)
             }
         }
-        return mutablePagedListMovies
     }
 
-    private fun searchFavorites(query: String): MutableLiveData<PagedListMovies> {
-        mutablePagedListMovies = MutableLiveData()
-
+    private fun searchFavorites(query: String) {
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                repository.searchFavorites(query)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                val pagedListMovies = PagedListMovies(totalResults = it.size, results = it as ArrayList<Movie>)
-                mutablePagedListMovies.postValue(pagedListMovies)
+                loadingMutableLiveData.value = LoadingState.HIDE
+                val pagedListMovies = PagedMovies(totalResults = it.size, results = it as ArrayList<Movie>)
+                pagedMoviesMutableLiveData.postValue(pagedListMovies)
             }
         }
-        return mutablePagedListMovies
     }
 }

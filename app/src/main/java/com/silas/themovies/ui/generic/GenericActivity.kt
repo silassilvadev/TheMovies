@@ -18,7 +18,7 @@ import com.silas.themovies.utils.extensions.hideProgress
  * @sample GenericActivity class YourActivity: GenericActivity() { ... }
  * @author Silas at 27/02/2020
  */
-open class GenericActivity: AppCompatActivity(), IViewProtocol {
+open class GenericActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ open class GenericActivity: AppCompatActivity(), IViewProtocol {
         this.animateTransition(false)
     }
 
-    override fun onResponseError(message: String) {
+    internal fun onMessage(message: String) {
         hideProgress()
         val correctMessage =
             if (message.isBlank()) getString(R.string.error_service_generic_response) else message

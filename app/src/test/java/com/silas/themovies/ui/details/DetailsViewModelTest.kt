@@ -3,7 +3,7 @@ package com.silas.themovies.ui.details
 import androidx.lifecycle.MutableLiveData
 import com.silas.themovies.model.BaseMoviesTest
 import com.silas.themovies.model.dto.response.Movie
-import com.silas.themovies.model.dto.response.PagedListMovies
+import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.ui.detail.DetailsViewModel
 import io.mockk.*
 import kotlinx.coroutines.*
@@ -84,7 +84,7 @@ class DetailsViewModelTest: BaseMoviesTest() {
 
     @Test
     fun `Success load related movies`() = runBlockingTest {
-        val relatedLiveData = MutableLiveData<PagedListMovies>()
+        val relatedLiveData = MutableLiveData<PagedMovies>()
 
         pauseDispatcher {
             coEvery { repository.loadRelatedAsync(any()) } returns mockk(relaxed = true)

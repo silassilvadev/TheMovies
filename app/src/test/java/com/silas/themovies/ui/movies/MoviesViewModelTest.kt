@@ -2,7 +2,7 @@ package com.silas.themovies.ui.movies
 
 import androidx.lifecycle.MutableLiveData
 import com.silas.themovies.model.BaseMoviesTest
-import com.silas.themovies.model.dto.response.PagedListMovies
+import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.ui.main.movies.MoviesViewModel
 import io.mockk.*
 import kotlinx.coroutines.*
@@ -65,11 +65,11 @@ class MoviesViewModelTest: BaseMoviesTest() {
 
     @Test
     fun `Searching for all popular movies returns successful`() = runBlockingTest {
-        val popularsLiveData = MutableLiveData<PagedListMovies>()
+        val popularsLiveData = MutableLiveData<PagedMovies>()
         pauseDispatcher {
             coEvery {
                 repository.loadPopulars(any())
-            } returns PagedListMovies(1, 10000, 500, arrayListOf())
+            } returns PagedMovies(1, 10000, 500, arrayListOf())
 
             popularsLiveData.value = viewModelSUT.getPopulars(1).value
         }
@@ -79,11 +79,11 @@ class MoviesViewModelTest: BaseMoviesTest() {
 
     @Test
     fun `Searching for popular movies returns successful`() = runBlockingTest {
-        val searchPopularsLiveData = MutableLiveData<PagedListMovies>()
+        val searchPopularsLiveData = MutableLiveData<PagedMovies>()
         pauseDispatcher {
             coEvery {
                 repository.searchPopulars(any())
-            } returns PagedListMovies(1, 10000, 500, arrayListOf())
+            } returns PagedMovies(1, 10000, 500, arrayListOf())
 
             searchPopularsLiveData.value = viewModelSUT.getPopulars(1, "Existing Movie").value
         }
@@ -93,7 +93,7 @@ class MoviesViewModelTest: BaseMoviesTest() {
 
     @Test
     fun `Searching for all favorite movies returns successful`() = runBlockingTest {
-        val favoritesLiveData = MutableLiveData<PagedListMovies>()
+        val favoritesLiveData = MutableLiveData<PagedMovies>()
             pauseDispatcher {
             coEvery {
                 repository.loadFavorites()
@@ -107,7 +107,7 @@ class MoviesViewModelTest: BaseMoviesTest() {
 
     @Test
     fun `Searching for favorite movies returns successful`() = runBlockingTest {
-        val searchFavoritesLiveData = MutableLiveData<PagedListMovies>()
+        val searchFavoritesLiveData = MutableLiveData<PagedMovies>()
         pauseDispatcher {
             coEvery {
                 repository.searchFavorites(any())

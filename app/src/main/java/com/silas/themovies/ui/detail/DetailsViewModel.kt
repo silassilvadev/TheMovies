@@ -1,5 +1,6 @@
 package com.silas.themovies.ui.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,8 +8,8 @@ import com.silas.themovies.data.remote.repository.MoviesRepository
 import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.dto.request.MovieDetailsDto
 import com.silas.themovies.model.dto.request.PagedListMoviesDto
-import com.silas.themovies.model.dto.response.PagedListMovies
-import com.silas.themovies.ui.IViewProtocol
+import com.silas.themovies.model.dto.response.PagedMovies
+import com.silas.themovies.ui.LoadingState
 import kotlinx.coroutines.*
 
 /**
@@ -16,103 +17,125 @@ import kotlinx.coroutines.*
  * The request made by the UI must be executed and returned when available.
  *
  * @param repository Single repository instance that will decide where to get the requested data
- * @param protocol Single instance of error message return protocol to UI
- * @property mutablePagedListMovies
- * @property mutableInsertFavorite
- * @property mutableDeleteFavorite
- * @property mutableMovie
+ * @property pagedRelatedMutableLiveData
+ * @property insertFavoritesMutableLiveData
+ * @property deleteFavoritesMutableLiveData
+ * @property movieMutableLiveData
  *  It is properties do basically the same thing as returning the response expected by the UI
  * @property viewModelScope Scope of request execution
  *
  * @author Silas at 24/02/2020
  */
-class DetailsViewModel(private val repository: MoviesRepository,
-                       private val protocol: IViewProtocol): ViewModel() {
+class DetailsViewModel(private val repository: MoviesRepository): ViewModel() {
 
-    private lateinit var mutableMovie: MutableLiveData<Movie>
-    private lateinit var mutablePagedListMovies: MutableLiveData<PagedListMovies>
-    private lateinit var mutableInsertFavorite: MutableLiveData<List<Long>>
-    private lateinit var mutableDeleteFavorite: MutableLiveData<Int>
+    private val movieMutableLiveData = MutableLiveData<Movie>()
+    val movieLiveData: LiveData<Movie> get()= movieMutableLiveData
+    
+    private val pagedRelatedMutableLiveData = MutableLiveData<PagedMovies>()
+    val pagedMoviesLiveData: LiveData<PagedMovies> get() = pagedRelatedMutableLiveData
+
+    private val updateFavoritesMutableLiveData = MutableLiveData<Boolean>()
+    val updateFavoritesLiveData: LiveData<Boolean> get() = updateFavoritesMutableLiveData
+
+    private val insertFavoritesMutableLiveData = MutableLiveData<List<Long>>()
+    val insertFavoritesLiveData: LiveData<List<Long>> get() = insertFavoritesMutableLiveData
+
+    private val deleteFavoritesMutableLiveData = MutableLiveData<Int>()
+    val deleteFavoriteLiveData: LiveData<Int> get() = deleteFavoritesMutableLiveData
+
+    private val errorMutableLiveData = MutableLiveData<String>()
+    val errorLiveData: LiveData<String> get() = errorMutableLiveData
+
+    private val loadingMutableLiveData = MutableLiveData<LoadingState>()
+    val loadingLiveData: LiveData<LoadingState> get() = loadingMutableLiveData
 
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
     }
 
-    fun loadDetails(movieId: Long): MutableLiveData<Movie> {
-        mutableMovie = MutableLiveData()
+    fun loadDetails(movieId: Long) {
         val movieDetailsDto = MovieDetailsDto(movieId)
 
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.loadDetailsAsync(movieDetailsDto)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                mutableMovie.postValue(it.await())
+                loadingMutableLiveData.value = LoadingState.HIDE
+                movieMutableLiveData.postValue(it.await())
             }
         }
-        return mutableMovie
     }
 
-    fun loadRelated(page: Int, movieId: Long): MutableLiveData<PagedListMovies> {
-        mutablePagedListMovies = MutableLiveData()
+    fun loadRelated(page: Int, movieId: Long) {
         val pagedListMoviesDto = PagedListMoviesDto(page, movieId = movieId)
 
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.loadRelatedAsync(pagedListMoviesDto)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                mutablePagedListMovies.postValue(it.await())
+                loadingMutableLiveData.value = LoadingState.HIDE
+                pagedRelatedMutableLiveData.postValue(it.await())
             }
         }
-        return mutablePagedListMovies
     }
 
-    fun saveFavorite(vararg movie: Movie): MutableLiveData<List<Long>> {
-        mutableInsertFavorite = MutableLiveData()
+    fun updateFavorite(vararg movie: Movie) {
+        movie.forEach {
+            if (it.hasFavorite) saveFavorite(*movie) else removeFavorite(*movie)
+        }
+    }
 
+    private fun saveFavorite(vararg movie: Movie) {
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.insertFavoriteAsync(*movie)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                mutableInsertFavorite.postValue(it.await())
+                loadingMutableLiveData.value = LoadingState.HIDE
+                updateFavoritesMutableLiveData.postValue(!it.await().isNullOrEmpty())
             }
         }
-        return mutableInsertFavorite
     }
 
-    fun removeFavorite(vararg movie: Movie): MutableLiveData<Int> {
-        mutableDeleteFavorite = MutableLiveData()
-
+    private fun removeFavorite(vararg movie: Movie) {
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.deleteFavoriteAsync(*movie)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                mutableDeleteFavorite.postValue(it.await())
+                loadingMutableLiveData.value = LoadingState.HIDE
+                updateFavoritesMutableLiveData.postValue(it.await() > 0)
             }
         }
-        return mutableDeleteFavorite
     }
 
-    fun loadFavoriteId(movieId: Long): MutableLiveData<Movie> {
-        mutableMovie = MutableLiveData()
-
+    fun loadFavoriteId(movieId: Long) {
         viewModelScope.launch {
             runCatching {
+                loadingMutableLiveData.value = LoadingState.SHOW
                 repository.loadFavoriteIdAsync(movieId)
             }.onFailure {
-                protocol.onResponseError(it.message ?: it.localizedMessage ?: "")
+                loadingMutableLiveData.value = LoadingState.HIDE
+                errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
-                mutableMovie.postValue(it.await())
+                loadingMutableLiveData.value = LoadingState.HIDE
+                movieMutableLiveData.postValue(it.await())
             }
         }
-        return mutableMovie
     }
 }
