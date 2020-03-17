@@ -12,7 +12,6 @@ import org.junit.Rule
 abstract class BaseMoviesTest {
 
     val repository = mockk<MoviesRepository>(relaxed = true)
-    val protocol = mockk<IViewProtocol>(relaxed = true)
 
     @ExperimentalCoroutinesApi
     @get:Rule

@@ -1,9 +1,7 @@
 package com.silas.themovies.ui.details
 
-import androidx.lifecycle.MutableLiveData
 import com.silas.themovies.model.BaseMoviesTest
 import com.silas.themovies.model.dto.response.Movie
-import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.ui.detail.DetailsViewModel
 import io.mockk.*
 import kotlinx.coroutines.*
@@ -19,19 +17,21 @@ class DetailsViewModelTest: BaseMoviesTest() {
 
     @Before
     fun setUp() {
-        viewModelSUT = DetailsViewModel(repository, protocol)
+        viewModelSUT = DetailsViewModel(repository)
     }
 
     @Test
     fun `Details not found`() = runBlockingTest {
         pauseDispatcher {
-            coEvery { repository.loadDetailsAsync(any()) }
-                .throws(Throwable("Invalid Movie Id"))
-
-            viewModelSUT.loadDetails(-1)
+            coEvery {
+                repository.loadDetailsAsync(any())
+            }.throws(Throwable("Invalid Movie Id"))
         }
 
-        verify { protocol.onResponseError(any()) }
+        viewModelSUT.loadDetails(-1)
+
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
@@ -40,79 +40,137 @@ class DetailsViewModelTest: BaseMoviesTest() {
             coEvery {
                 repository.loadRelatedAsync(any())
             }.throws(Throwable("Invalid data returned"))
-
-            viewModelSUT.loadRelated(1,-1)
         }
 
-        verify { protocol.onResponseError(any()) }
+        viewModelSUT.loadRelated(1,-1)
+
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
-    fun `Errors updating favorites`() = runBlockingTest {
+    fun `Errors verify is favorite`() = runBlockingTest {
         pauseDispatcher {
-            coEvery { repository.loadFavoriteIdAsync(any()) }
-                .throws(Throwable("Invalid favorites"))
-            coEvery { repository.insertFavoriteAsync(any()) }
-                .throws(Throwable("Invalid insert favorite"))
-            coEvery { repository.deleteFavoriteAsync(any()) }
-                .throws(Throwable("Invalid delete favorite"))
-
-            viewModelSUT.loadFavoriteId(-1)
-            viewModelSUT.saveFavorite(mockk(relaxed = true))
-            viewModelSUT.removeFavorite(mockk(relaxed = true))
+            coEvery {
+                repository.loadFavoriteIdAsync(any())
+            }.throws(Throwable("Invalid favorites"))
         }
 
-        verifyAll {
-            protocol.onResponseError(any())
-            protocol.onResponseError(any())
-            protocol.onResponseError(any())
+        viewModelSUT.loadFavoriteId(-1)
+
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
+    }
+
+    @Test
+    fun `Errors insert favorites`() = runBlockingTest {
+        pauseDispatcher {
+            coEvery {
+                repository.insertFavoriteAsync(any())
+            }.throws(Throwable("Invalid insert favorite"))
         }
+
+        val movieInsert = mockk<Movie>(relaxed = true).apply {
+            hasFavorite = true
+        }
+
+        viewModelSUT.updateFavorite(movieInsert)
+
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
+    }
+
+    @Test
+    fun `Errors remove favorites`() = runBlockingTest {
+        pauseDispatcher {
+            coEvery {
+                repository.deleteFavoriteAsync(any())
+            }.throws(Throwable("Invalid remove favorite"))
+        }
+
+        val movieRemove = mockk<Movie>(relaxed = true).apply {
+            hasFavorite = false
+        }
+
+        viewModelSUT.updateFavorite(movieRemove)
+
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
     fun `Success load details movie`() = runBlockingTest {
-        val detailsLiveData = MutableLiveData<Movie>()
-
         pauseDispatcher {
-            coEvery { repository.loadDetailsAsync(any()) } returns mockk(relaxed = true)
-
-            detailsLiveData.value = viewModelSUT.loadDetails(1).value
+            coEvery {
+                repository.loadDetailsAsync(any())
+            }.returns(mockk(relaxed = true))
         }
 
-        assertTrue(detailsLiveData.value != null)
+        viewModelSUT.loadDetails(1)
+
+        assertTrue(viewModelSUT.movieDetailsLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
     fun `Success load related movies`() = runBlockingTest {
-        val relatedLiveData = MutableLiveData<PagedMovies>()
-
         pauseDispatcher {
-            coEvery { repository.loadRelatedAsync(any()) } returns mockk(relaxed = true)
-
-            relatedLiveData.value = viewModelSUT.loadRelated(1, 1).value
+            coEvery {
+                repository.loadRelatedAsync(any())
+            } returns mockk(relaxed = true)
         }
 
-        assertTrue(relatedLiveData.value != null)
+        viewModelSUT.loadRelated(1, 1)
+
+        assertTrue(viewModelSUT.pagedRelatedLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
-    fun `Success updating favorites`() = runBlockingTest {
-        val favoriteLiveData = MutableLiveData<Movie>()
-        val insertedLiveData = MutableLiveData<List<Long>>()
-        val removedLiveData = MutableLiveData<Int>()
-
+    fun `Success verify is favorite`() = runBlockingTest {
         pauseDispatcher {
-            coEvery { repository.loadFavoriteIdAsync(any()) } returns mockk(relaxed = true)
-            coEvery { repository.insertFavoriteAsync(any()) } returns mockk(relaxed = true)
-            coEvery { repository.deleteFavoriteAsync(any()) } returns mockk(relaxed = true)
-
-            favoriteLiveData.value = viewModelSUT.loadFavoriteId(1).value
-            insertedLiveData.value = viewModelSUT.saveFavorite(mockk(relaxed = true)).value
-            removedLiveData.value = viewModelSUT.removeFavorite(mockk(relaxed = true)).value
+            coEvery {
+                repository.loadFavoriteIdAsync(any())
+            } returns mockk(relaxed = true)
         }
 
-        assertTrue(favoriteLiveData.value != null)
-        assertTrue(insertedLiveData.value != null)
-        assertTrue(removedLiveData.value != null)
+        viewModelSUT.loadFavoriteId(1)
+
+        assertTrue(viewModelSUT.movieDetailsLiveData.value != null)
+        resumeDispatcher()
+    }
+
+    @Test
+    fun `Success insert favorite`() = runBlockingTest {
+        pauseDispatcher {
+            coEvery {
+                repository.insertFavoriteAsync(any()).await()
+            } returns listOf(1L)
+        }
+
+        val movieInsert = mockk<Movie> {
+            every { hasFavorite } returns true
+        }
+        viewModelSUT.updateFavorite(movieInsert)
+
+        assertTrue(viewModelSUT.updateFavoritesLiveData.value != null)
+        resumeDispatcher()
+    }
+
+    @Test
+    fun `Success remove favorite`() = runBlockingTest {
+        pauseDispatcher {
+            coEvery {
+                repository.deleteFavoriteAsync(any()).await()
+            } returns 1
+        }
+
+        val movieInsert = mockk<Movie> {
+            every { hasFavorite } returns false
+        }
+        viewModelSUT.updateFavorite(movieInsert)
+
+        assertTrue(viewModelSUT.updateFavoritesLiveData.value != null)
+        resumeDispatcher()
     }
 }

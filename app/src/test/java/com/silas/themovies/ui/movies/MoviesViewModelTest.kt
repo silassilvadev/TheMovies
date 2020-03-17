@@ -1,6 +1,5 @@
 package com.silas.themovies.ui.movies
 
-import androidx.lifecycle.MutableLiveData
 import com.silas.themovies.model.BaseMoviesTest
 import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.ui.main.movies.MoviesViewModel
@@ -18,7 +17,24 @@ class MoviesViewModelTest: BaseMoviesTest() {
 
     @Before
     internal fun setUp() {
-        viewModelSUT = MoviesViewModel(repository, protocol)
+        viewModelSUT = MoviesViewModel(repository)
+    }
+
+    @Test
+    fun `Get all popular movies returns error`() = runBlockingTest {
+        pauseDispatcher {
+            //Given
+            coEvery {
+                repository.loadPopulars(any())
+            } coAnswers { throw Throwable("Invalid data returned") }
+        }
+
+        //When
+        viewModelSUT.getPopulars(-1)
+
+        //Then
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
@@ -26,20 +42,33 @@ class MoviesViewModelTest: BaseMoviesTest() {
         pauseDispatcher {
             //Given
             coEvery {
-                repository.loadPopulars(any())
                 repository.searchPopulars(any())
             } coAnswers { throw Throwable("Invalid data returned") }
-
-            //When
-            viewModelSUT.getPopulars(-1)
-            viewModelSUT.getPopulars(1, "Movie non-existent")
         }
+
+        //When
+        viewModelSUT.getPopulars(1, "Movie non-existent")
 
         //Then
-        verifyAll {
-            protocol.onResponseError(any())
-            protocol.onResponseError(any())
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
+    }
+
+    @Test
+    fun `Get all favorite movies returns error`() = runBlockingTest {
+        pauseDispatcher {
+            //Given
+            coEvery {
+                repository.loadFavorites()
+            } coAnswers { throw Throwable("Invalid data returned") }
         }
+
+        //When
+        viewModelSUT.getFavorites("")
+
+        //Then
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
@@ -47,75 +76,71 @@ class MoviesViewModelTest: BaseMoviesTest() {
         pauseDispatcher {
             //Given
             coEvery {
-                repository.loadFavorites()
                 repository.searchFavorites(any())
             } coAnswers { throw Throwable("Invalid data returned") }
-
-            //When
-            viewModelSUT.getFavorites("")
-            viewModelSUT.getFavorites("Favorite non-existent")
         }
+
+        //When
+        viewModelSUT.getFavorites("Favorite non-existent")
 
         //Then
-        verify {
-            protocol.onResponseError(any())
-            protocol.onResponseError(any())
+        assertTrue(viewModelSUT.errorLiveData.value != null)
+        resumeDispatcher()
+    }
+
+    @Test
+    fun `Get all popular movies returns successful`() = runBlockingTest {
+        pauseDispatcher {
+            coEvery {
+                repository.loadPopulars(any())
+            }.returns(PagedMovies(1, 10000, 500, arrayListOf()))
         }
+
+        viewModelSUT.getPopulars(1, "")
+
+        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
     fun `Searching for all popular movies returns successful`() = runBlockingTest {
-        val popularsLiveData = MutableLiveData<PagedMovies>()
-        pauseDispatcher {
-            coEvery {
-                repository.loadPopulars(any())
-            } returns PagedMovies(1, 10000, 500, arrayListOf())
-
-            popularsLiveData.value = viewModelSUT.getPopulars(1).value
-        }
-
-        assertTrue(popularsLiveData.value != null)
-    }
-
-    @Test
-    fun `Searching for popular movies returns successful`() = runBlockingTest {
-        val searchPopularsLiveData = MutableLiveData<PagedMovies>()
         pauseDispatcher {
             coEvery {
                 repository.searchPopulars(any())
             } returns PagedMovies(1, 10000, 500, arrayListOf())
-
-            searchPopularsLiveData.value = viewModelSUT.getPopulars(1, "Existing Movie").value
         }
 
-        assertTrue(searchPopularsLiveData.value != null)
+        viewModelSUT.getPopulars(1, "Parasita")
+
+        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
-    fun `Searching for all favorite movies returns successful`() = runBlockingTest {
-        val favoritesLiveData = MutableLiveData<PagedMovies>()
-            pauseDispatcher {
+    fun `Get all favorite movies returns successful`() = runBlockingTest {
+        pauseDispatcher {
             coEvery {
                 repository.loadFavorites()
             } returns arrayListOf()
-
-            favoritesLiveData.value = viewModelSUT.getFavorites("").value
         }
 
-        assertTrue(favoritesLiveData.value != null)
+        viewModelSUT.getFavorites("")
+
+        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
+        resumeDispatcher()
     }
 
     @Test
     fun `Searching for favorite movies returns successful`() = runBlockingTest {
-        val searchFavoritesLiveData = MutableLiveData<PagedMovies>()
         pauseDispatcher {
             coEvery {
                 repository.searchFavorites(any())
             } returns arrayListOf()
-
-            searchFavoritesLiveData.value = viewModelSUT.getFavorites("Existing Favorite").value
         }
 
-        assertTrue(searchFavoritesLiveData.value != null)
+        viewModelSUT.getFavorites("Parasita")
+
+        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
+        resumeDispatcher()
     }
 }

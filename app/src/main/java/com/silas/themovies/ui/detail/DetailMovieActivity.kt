@@ -112,7 +112,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
     }
 
     private fun observeLoadDetails() {
-        detailsViewModel.movieLiveData.observe(this, Observer { details ->
+        detailsViewModel.movieDetailsLiveData.observe(this, Observer { details ->
             details?.let {
                 movieDetails = it
                 loadViews()
@@ -124,14 +124,14 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
     }
 
     private fun observeIsFavorite() {
-        detailsViewModel.movieLiveData.observe(this, Observer {
+        detailsViewModel.movieDetailsLiveData.observe(this, Observer {
             movieDetails.hasFavorite = it?.hasFavorite ?: false
             updateViewFavorite()
         })
     }
 
     private fun observeRelatedMovies() {
-        detailsViewModel.pagedMoviesLiveData.observe(this, Observer {
+        detailsViewModel.pagedRelatedLiveData.observe(this, Observer {
             if (currentPageRelated > 1) {
                 this.pagedRelatedMovies.updatePage(it)
                 this.relatedAdapter.notifyDataSetChanged()

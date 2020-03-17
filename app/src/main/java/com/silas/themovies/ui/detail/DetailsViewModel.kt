@@ -18,9 +18,8 @@ import kotlinx.coroutines.*
  *
  * @param repository Single repository instance that will decide where to get the requested data
  * @property pagedRelatedMutableLiveData
- * @property insertFavoritesMutableLiveData
- * @property deleteFavoritesMutableLiveData
- * @property movieMutableLiveData
+ * @property updateFavoritesLiveData
+ * @property movieDetailsMutableLiveData
  *  It is properties do basically the same thing as returning the response expected by the UI
  * @property viewModelScope Scope of request execution
  *
@@ -28,20 +27,14 @@ import kotlinx.coroutines.*
  */
 class DetailsViewModel(private val repository: MoviesRepository): ViewModel() {
 
-    private val movieMutableLiveData = MutableLiveData<Movie>()
-    val movieLiveData: LiveData<Movie> get()= movieMutableLiveData
+    private val movieDetailsMutableLiveData = MutableLiveData<Movie>()
+    val movieDetailsLiveData: LiveData<Movie> get()= movieDetailsMutableLiveData
     
     private val pagedRelatedMutableLiveData = MutableLiveData<PagedMovies>()
-    val pagedMoviesLiveData: LiveData<PagedMovies> get() = pagedRelatedMutableLiveData
+    val pagedRelatedLiveData: LiveData<PagedMovies> get() = pagedRelatedMutableLiveData
 
     private val updateFavoritesMutableLiveData = MutableLiveData<Boolean>()
     val updateFavoritesLiveData: LiveData<Boolean> get() = updateFavoritesMutableLiveData
-
-    private val insertFavoritesMutableLiveData = MutableLiveData<List<Long>>()
-    val insertFavoritesLiveData: LiveData<List<Long>> get() = insertFavoritesMutableLiveData
-
-    private val deleteFavoritesMutableLiveData = MutableLiveData<Int>()
-    val deleteFavoriteLiveData: LiveData<Int> get() = deleteFavoritesMutableLiveData
 
     private val errorMutableLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> get() = errorMutableLiveData
@@ -66,7 +59,7 @@ class DetailsViewModel(private val repository: MoviesRepository): ViewModel() {
                 errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
                 loadingMutableLiveData.value = LoadingState.HIDE
-                movieMutableLiveData.postValue(it.await())
+                movieDetailsMutableLiveData.postValue(it.await())
             }
         }
     }
@@ -134,7 +127,7 @@ class DetailsViewModel(private val repository: MoviesRepository): ViewModel() {
                 errorMutableLiveData.value = it.message ?: it.localizedMessage ?: ""
             }.onSuccess {
                 loadingMutableLiveData.value = LoadingState.HIDE
-                movieMutableLiveData.postValue(it.await())
+                movieDetailsMutableLiveData.postValue(it.await())
             }
         }
     }
