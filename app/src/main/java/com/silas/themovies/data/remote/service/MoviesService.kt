@@ -2,6 +2,7 @@ package com.silas.themovies.data.remote.service
 
 import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.model.dto.response.Movie
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -15,15 +16,15 @@ import retrofit2.http.Query
 interface MoviesService {
 
     @GET("movie/popular")
-    suspend fun loadPopulars(@Query("api_key") apiKey: String,
-                             @Query("language") language: String,
-                             @Query("page") page: Int): PagedMovies
+    fun loadPopulars(@Query("api_key") apiKey: String,
+                     @Query("language") language: String,
+                     @Query("page") page: Int): Single<PagedMovies>
 
     @GET("search/movie")
-    suspend fun searchPopulars(@Query("api_key") apiKey: String,
-                               @Query("language") language: String,
-                               @Query("page") page: Int,
-                               @Query("query") query: String): PagedMovies
+    fun searchPopulars(@Query("api_key") apiKey: String,
+                       @Query("language") language: String,
+                       @Query("page") page: Int,
+                       @Query("query") query: String): Single<PagedMovies>
 
     @GET("movie/{movie_id}")
     suspend fun loadDetails(@Path("movie_id") idMovie: Long,

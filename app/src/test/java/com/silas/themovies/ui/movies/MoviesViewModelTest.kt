@@ -2,145 +2,179 @@ package com.silas.themovies.ui.movies
 
 import com.silas.themovies.model.BaseMoviesTest
 import com.silas.themovies.model.dto.response.PagedMovies
-import com.silas.themovies.ui.main.movies.MoviesViewModel
+import com.silas.themovies.ui.LoadingState
+import com.silas.themovies.ui.main.presenter.MoviesContract
+import com.silas.themovies.ui.main.presenter.MoviesPresenter
 import io.mockk.*
+import io.reactivex.Maybe
+import io.reactivex.Single
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class MoviesViewModelTest: BaseMoviesTest() {
 
-    private lateinit var viewModelSUT: MoviesViewModel
+    private val view: MoviesContract.View = mockk(relaxed = true)
+    private lateinit var presenter: MoviesContract.Presenter
+
 
     @Before
     internal fun setUp() {
-        viewModelSUT = MoviesViewModel(repository)
+        presenter = MoviesPresenter(view, compositeDisposable, repository)
     }
 
     @Test
-    fun `Get all popular movies returns error`() = runBlockingTest {
-        pauseDispatcher {
-            //Given
-            coEvery {
-                repository.loadPopulars(any())
-            } coAnswers { throw Throwable("Invalid data returned") }
-        }
+    fun `Get all popular movies returns error`() {
+        //Given
+        every {
+            repository.loadPopulars(any())
+        } answers { Single.error(Throwable("Invalid data returned")) }
 
         //When
-        viewModelSUT.getPopulars(-1)
+        presenter.getPopulars(-1)
 
         //Then
-        assertTrue(viewModelSUT.errorLiveData.value != null)
-        resumeDispatcher()
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.responseError(any())
+            view.updateLoading(LoadingState.HIDE)
+        }
     }
 
     @Test
-    fun `Searching for popular movies returns error`() = runBlockingTest {
-        pauseDispatcher {
-            //Given
-            coEvery {
-                repository.searchPopulars(any())
-            } coAnswers { throw Throwable("Invalid data returned") }
-        }
+    fun `Searching for popular movies returns error`() {
+        //Given
+        every {
+            repository.searchPopulars(any())
+        } answers { Single.error(Throwable("Invalid data returned")) }
 
         //When
-        viewModelSUT.getPopulars(1, "Movie non-existent")
+        presenter.getPopulars(1, "Movie non-existent")
 
         //Then
-        assertTrue(viewModelSUT.errorLiveData.value != null)
-        resumeDispatcher()
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.responseError(any())
+            view.updateLoading(LoadingState.HIDE)
+        }
     }
 
     @Test
-    fun `Get all favorite movies returns error`() = runBlockingTest {
-        pauseDispatcher {
-            //Given
-            coEvery {
-                repository.loadFavorites()
-            } coAnswers { throw Throwable("Invalid data returned") }
-        }
+    fun `Get all favorite movies returns error`() {
+        //Given
+        every {
+            repository.loadFavorites()
+        } answers { Maybe.error(Throwable("Invalid data returned")) }
 
         //When
-        viewModelSUT.getFavorites("")
+        presenter.getFavorites("")
 
         //Then
-        assertTrue(viewModelSUT.errorLiveData.value != null)
-        resumeDispatcher()
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.responseError(any())
+            view.updateLoading(LoadingState.HIDE)
+        }
     }
 
     @Test
-    fun `Searching for favorite movies returns error`() = runBlockingTest {
-        pauseDispatcher {
-            //Given
-            coEvery {
-                repository.searchFavorites(any())
-            } coAnswers { throw Throwable("Invalid data returned") }
-        }
+    fun `Searching for favorite movies returns error`() {
+        //Given
+        every {
+            repository.searchFavorites(any())
+        } answers { Maybe.error(Throwable("Invalid data returned")) }
 
         //When
-        viewModelSUT.getFavorites("Favorite non-existent")
+        presenter.getFavorites("Favorite non-existent")
 
         //Then
-        assertTrue(viewModelSUT.errorLiveData.value != null)
-        resumeDispatcher()
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.responseError(any())
+            view.updateLoading(LoadingState.HIDE)
+        }
     }
 
     @Test
-    fun `Get all popular movies returns successful`() = runBlockingTest {
-        pauseDispatcher {
-            coEvery {
-                repository.loadPopulars(any())
-            }.returns(PagedMovies(1, 10000, 500, arrayListOf()))
+    fun `Get all popular movies returns successful`() {
+        every {
+            repository.loadPopulars(any())
+        } returns Single.just(PagedMovies(1, 10000, 500, arrayListOf()))
+
+        presenter.getPopulars(1, "")
+
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.updateMovies(any())
+            view.updateLoading(LoadingState.HIDE)
         }
-
-        viewModelSUT.getPopulars(1, "")
-
-        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
-        resumeDispatcher()
     }
 
     @Test
-    fun `Searching for all popular movies returns successful`() = runBlockingTest {
-        pauseDispatcher {
-            coEvery {
-                repository.searchPopulars(any())
-            } returns PagedMovies(1, 10000, 500, arrayListOf())
+    fun `Searching for all popular movies returns successful`() {
+        every {
+            repository.searchPopulars(any())
+        } returns Single.just(PagedMovies(1, 10000, 500, arrayListOf(mockk())))
+
+
+        presenter.getPopulars(1, "Parasita")
+
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.updateMovies(any())
+            view.updateLoading(LoadingState.HIDE)
         }
-
-        viewModelSUT.getPopulars(1, "Parasita")
-
-        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
-        resumeDispatcher()
     }
 
     @Test
-    fun `Get all favorite movies returns successful`() = runBlockingTest {
-        pauseDispatcher {
-            coEvery {
-                repository.loadFavorites()
-            } returns arrayListOf()
+    fun `Get all favorite movies returns successful`() {
+        every {
+            repository.loadFavorites()
+        } returns Maybe.just(arrayListOf())
+
+        presenter.getFavorites("")
+
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.updateMovies(any())
+            view.updateLoading(LoadingState.HIDE)
         }
-
-        viewModelSUT.getFavorites("")
-
-        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
-        resumeDispatcher()
     }
 
     @Test
-    fun `Searching for favorite movies returns successful`() = runBlockingTest {
-        pauseDispatcher {
-            coEvery {
-                repository.searchFavorites(any())
-            } returns arrayListOf()
+    fun `Searching for favorite movies returns successful`() {
+        every {
+            repository.searchFavorites(any())
+        } returns Maybe.just(arrayListOf(mockk()))
+
+        presenter.getFavorites("Parasita")
+
+        verifyAll {
+            view.updateLoading(LoadingState.SHOW)
+            view.updateMovies(any())
+            view.updateLoading(LoadingState.HIDE)
+        }
+    }
+
+    @Test
+    fun `Checking if view is destroyed`() {
+        every {
+            repository.loadPopulars(any())
+        } returns Single.just(mockk(relaxed = true))
+
+        presenter.destroy()
+        presenter.getPopulars()
+
+        verify {
+            compositeDisposable.dispose()
         }
 
-        viewModelSUT.getFavorites("Parasita")
-
-        assertTrue(viewModelSUT.pagedMoviesLiveData.value != null)
-        resumeDispatcher()
+        verify(exactly = 0) {
+            view.updateLoading(any())
+            view.updateLoading(any())
+            view.responseError(any())
+        }
     }
+
 }

@@ -9,10 +9,15 @@ data class PagedMovies(var page: Int = 1,
                        var results: ArrayList<Movie>) : Serializable {
 
     // Updates the page and adds the new results delivered by [newPagedListMovies]
-    fun updatePage(newPagedMovies: PagedMovies) {
+    fun updateMovies(newPagedMovies: PagedMovies) {
         this.page = newPagedMovies.page
-        this.totalResults = newPagedMovies.totalResults
-        this.totalPages = newPagedMovies.totalPages
+        if (newPagedMovies.page > 1) {
+            this.totalResults += newPagedMovies.totalResults
+            this.totalPages += newPagedMovies.totalPages
+        } else {
+            this.totalResults = newPagedMovies.totalResults
+            this.totalPages = newPagedMovies.totalPages
+        }
         this.results.addAll(newPagedMovies.results)
     }
 }

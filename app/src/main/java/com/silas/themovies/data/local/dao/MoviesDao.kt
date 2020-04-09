@@ -2,6 +2,8 @@ package com.silas.themovies.data.local.dao
 
 import androidx.room.*
 import com.silas.themovies.model.dto.response.Movie
+import io.reactivex.Maybe
+import io.reactivex.Single
 
 /**
  * Here, queries to local data are mounted, and requested from the database
@@ -12,10 +14,10 @@ import com.silas.themovies.model.dto.response.Movie
 interface MoviesDao {
 
     @Query("SELECT * FROM Favorite")
-    suspend fun loadFavorites(): List<Movie>
+    fun loadFavorites(): Maybe<List<Movie>>
 
     @Query("SELECT * FROM Favorite WHERE title LIKE '%' || :query || '%'")
-    suspend fun searchFavorites(query: String): List<Movie>
+    fun searchFavorites(query: String): Maybe<List<Movie>>
 
     @Query("SELECT * FROM Favorite WHERE id = :movieId")
     suspend fun loadFavoriteId(movieId: Long): Movie

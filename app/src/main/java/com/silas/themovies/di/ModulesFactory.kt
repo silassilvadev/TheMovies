@@ -6,9 +6,10 @@ import com.silas.themovies.data.local.database.MoviesDatabase
 import com.silas.themovies.data.remote.client.ClientService
 import com.silas.themovies.data.remote.service.MoviesService
 import com.silas.themovies.data.remote.repository.MoviesRepository
-import com.silas.themovies.ui.IViewProtocol
 import com.silas.themovies.ui.detail.DetailsViewModel
-import com.silas.themovies.ui.main.movies.MoviesViewModel
+import com.silas.themovies.ui.main.presenter.MoviesContract
+import com.silas.themovies.ui.main.presenter.MoviesPresenter
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -21,11 +22,15 @@ object ModulesFactory {
 
     private val applicationModule = module {
         single { MoviesDatabase.instance(get()) }
+        factory { CompositeDisposable() }
         single<MoviesService> { ClientService.createNewService(BuildConfig.THE_MOVIES_URL) }
     }
 
+    private val presenterModule = module {
+        factory { (view: MoviesContract.View) -> MoviesPresenter(view, get(), get()) }
+    }
+
     private val viewModelModule = module {
-        viewModel { MoviesViewModel(get()) }
         viewModel { DetailsViewModel(get()) }
     }
 
@@ -33,5 +38,5 @@ object ModulesFactory {
         single { MoviesRepository(get(), get<AppDatabase>().movieDao() ) }
     }
 
-    val modules = listOf(applicationModule, viewModelModule, repositoryModule)
+    val modules = listOf(applicationModule, presenterModule, viewModelModule, repositoryModule)
 }

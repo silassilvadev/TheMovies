@@ -5,6 +5,8 @@ import com.silas.themovies.data.remote.service.MoviesService
 import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.dto.request.MovieDetailsDto
 import com.silas.themovies.model.dto.request.PagedListMoviesDto
+import com.silas.themovies.model.dto.response.PagedMovies
+import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -21,24 +23,19 @@ import kotlinx.coroutines.withContext
  */
 class MoviesRepository(private val service: MoviesService, private val moviesDao: MoviesDao) {
 
-    suspend fun loadPopulars(pagedListMoviesDto: PagedListMoviesDto) =
-        withContext(Dispatchers.IO) {
-            service.loadPopulars(
-                pagedListMoviesDto.apiKey,
-                pagedListMoviesDto.language,
-                pagedListMoviesDto.page
-            )
-        }
+    fun loadPopulars(pagedListMoviesDto: PagedListMoviesDto) =
+        service.loadPopulars(
+            pagedListMoviesDto.apiKey,
+            pagedListMoviesDto.language,
+            pagedListMoviesDto.page)
 
 
-    suspend fun searchPopulars(pagedListMovies: PagedListMoviesDto) =
-        withContext(Dispatchers.IO) {
-            service.searchPopulars(
-                pagedListMovies.apiKey,
-                pagedListMovies.language,
-                pagedListMovies.page,
-                pagedListMovies.search ?: "")
-        }
+    fun searchPopulars(pagedListMovies: PagedListMoviesDto) =
+        service.searchPopulars(
+            pagedListMovies.apiKey,
+            pagedListMovies.language,
+            pagedListMovies.page,
+            pagedListMovies.search ?: "")
 
     suspend fun loadDetailsAsync(movieDetails: MovieDetailsDto) =
         withContext(Dispatchers.IO) {
@@ -71,9 +68,7 @@ class MoviesRepository(private val service: MoviesService, private val moviesDao
     suspend fun loadFavoriteIdAsync(movieId: Long)  =
         withContext(Dispatchers.IO) { async { moviesDao.loadFavoriteId(movieId) } }
 
-    suspend fun loadFavorites()  =
-        withContext(Dispatchers.IO) { moviesDao.loadFavorites() }
+    fun loadFavorites() = moviesDao.loadFavorites()
 
-    suspend fun searchFavorites(query: String)  =
-        withContext(Dispatchers.IO) { moviesDao.searchFavorites(query) }
+    fun searchFavorites(query: String)  = moviesDao.searchFavorites(query)
 }

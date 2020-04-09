@@ -133,7 +133,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
     private fun observeRelatedMovies() {
         detailsViewModel.pagedRelatedLiveData.observe(this, Observer {
             if (currentPageRelated > 1) {
-                this.pagedRelatedMovies.updatePage(it)
+                this.pagedRelatedMovies.updateMovies(it)
                 this.relatedAdapter.notifyDataSetChanged()
             } else {
                 this.pagedRelatedMovies = it

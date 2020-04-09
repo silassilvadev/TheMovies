@@ -3,8 +3,8 @@
 
     <!-- region ERRORS -->
     <string name="error_service_generic_response">Tente novamente mais tarde</string>
-    <string name="error_empty_list_movies">Filme não encontrado</string>
-    <string name="error_empty_favorite_movies">Favorito não encontrado</string>
+    <string name="error_empty_list_movies">Nenhum filme não encontrado</string>
+    <string name="error_empty_favorite_movies">Nenhum favorito não encontrado</string>
     <!-- endregion -->
 
     <!-- region Toolbar -->
