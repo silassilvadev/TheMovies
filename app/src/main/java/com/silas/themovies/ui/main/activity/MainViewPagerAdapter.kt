@@ -1,9 +1,9 @@
-package com.silas.themovies.ui.main
+package com.silas.themovies.ui.main.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.silas.themovies.ui.main.movies.MoviesFragment
+import com.silas.themovies.ui.main.fragment.MoviesFragment
 
 /**
  * Fragments adapter with ViewPagers of movies

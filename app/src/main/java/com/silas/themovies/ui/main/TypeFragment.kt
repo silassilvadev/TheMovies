@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.movies
+package com.silas.themovies.ui.main
 
 import com.silas.themovies.R
 

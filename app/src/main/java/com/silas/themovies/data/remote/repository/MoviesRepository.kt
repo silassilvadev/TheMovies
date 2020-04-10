@@ -5,11 +5,6 @@ import com.silas.themovies.data.remote.service.MoviesService
 import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.dto.request.MovieDetailsDto
 import com.silas.themovies.model.dto.request.PagedListMoviesDto
-import com.silas.themovies.model.dto.response.PagedMovies
-import io.reactivex.Single
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
 
 /**
  * You receive a request, request data and decide where, and how to get the request.
@@ -37,36 +32,25 @@ class MoviesRepository(private val service: MoviesService, private val moviesDao
             pagedListMovies.page,
             pagedListMovies.search ?: "")
 
-    suspend fun loadDetailsAsync(movieDetails: MovieDetailsDto) =
-        withContext(Dispatchers.IO) {
-            async {
-                service.loadDetails(
-                    movieDetails.idMovie,
-                    movieDetails.apiKey,
-                    movieDetails.language)
-            }
-        }
+    fun loadDetails(movieDetails: MovieDetailsDto) =
+        service.loadDetails(
+            movieDetails.idMovie,
+            movieDetails.apiKey,
+            movieDetails.language)
 
-    suspend fun loadRelatedAsync(pagedListMovies: PagedListMoviesDto) =
-        withContext(Dispatchers.IO) {
-            async {
-                service.searchRelated(
-                    pagedListMovies.movieId,
-                    pagedListMovies.apiKey,
-                    pagedListMovies.language,
-                    pagedListMovies.page
-                )
-            }
-        }
+    fun loadRelated(pagedListMovies: PagedListMoviesDto) =
+        service.searchRelated(
+            pagedListMovies.movieId,
+            pagedListMovies.apiKey,
+            pagedListMovies.language,
+            pagedListMovies.page)
 
-    suspend fun insertFavoriteAsync(vararg movie: Movie) =
-        withContext(Dispatchers.IO) { async { moviesDao.insertFavorite(*movie) } }
 
-    suspend fun deleteFavoriteAsync(vararg movie: Movie)  =
-        withContext(Dispatchers.IO) { async { moviesDao.deleteFavorite(*movie) } }
+    fun insertFavorite(vararg movie: Movie) = moviesDao.insertFavorite(*movie)
 
-    suspend fun loadFavoriteIdAsync(movieId: Long)  =
-        withContext(Dispatchers.IO) { async { moviesDao.loadFavoriteId(movieId) } }
+    fun deleteFavorite(vararg movie: Movie)  = moviesDao.deleteFavorite(*movie)
+
+    fun checkFavoriteId(movieId: Long)  = moviesDao.checkFavoriteId(movieId)
 
     fun loadFavorites() = moviesDao.loadFavorites()
 

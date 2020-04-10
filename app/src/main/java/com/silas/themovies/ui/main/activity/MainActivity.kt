@@ -1,12 +1,12 @@
-package com.silas.themovies.ui.main
+package com.silas.themovies.ui.main.activity
 
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.widget.SearchView
 import com.silas.themovies.R
 import com.silas.themovies.ui.generic.GenericActivity
-import com.silas.themovies.ui.main.movies.MoviesFragment
-import com.silas.themovies.ui.main.movies.TypeFragment
+import com.silas.themovies.ui.main.fragment.MoviesFragment
+import com.silas.themovies.ui.main.TypeFragment
 import com.silas.themovies.utils.extensions.onTabSelected
 import kotlinx.android.synthetic.main.activity_main_movies.*
 
@@ -70,8 +70,10 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, SearchVi
         this.viewPagerAdapter = MainViewPagerAdapter(
             arrayListOf(
                 MoviesFragment(TypeFragment.POPULARS),
-                MoviesFragment(TypeFragment.FAVORITES)),
-            this).apply {
+                MoviesFragment(TypeFragment.FAVORITES)
+            ),
+            this
+        ).apply {
             view_pager_main_container.adapter = this
         }
         tab_layout_main.setupWithViewPager(view_pager_main_container, false)

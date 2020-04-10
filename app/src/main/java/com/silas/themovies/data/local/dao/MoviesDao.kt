@@ -20,11 +20,11 @@ interface MoviesDao {
     fun searchFavorites(query: String): Maybe<List<Movie>>
 
     @Query("SELECT * FROM Favorite WHERE id = :movieId")
-    suspend fun loadFavoriteId(movieId: Long): Movie
+    fun checkFavoriteId(movieId: Long): Maybe<Movie?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavorite(vararg movie: Movie): List<Long>
+    fun insertFavorite(vararg movie: Movie): Maybe<List<Long>>
 
     @Delete
-    suspend fun deleteFavorite(vararg movie: Movie): Int
+    fun deleteFavorite(vararg movie: Movie): Maybe<Int>
 }

@@ -1,8 +1,7 @@
-package com.silas.themovies.ui.detail
+package com.silas.themovies.ui.detail.activity
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,19 +10,22 @@ import com.silas.themovies.model.dto.response.Movie
 import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.model.type.BackDropType
 import com.silas.themovies.ui.LoadingState
+import com.silas.themovies.ui.detail.presenter.DetailsContract
+import com.silas.themovies.ui.detail.presenter.DetailsPresenter
 import com.silas.themovies.ui.generic.GenericActivity
-import com.silas.themovies.ui.main.MainActivity.Companion.KEY_MOVIE
-import com.silas.themovies.ui.main.movies.MovieAdapter
+import com.silas.themovies.ui.main.activity.MainActivity.Companion.KEY_MOVIE
+import com.silas.themovies.ui.main.fragment.MovieAdapter
 import com.silas.themovies.utils.extensions.*
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 import kotlinx.android.synthetic.main.activity_detail_movie.text_view_detail_movie_popularity
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 /**
  * After selecting a movie to view details, this class goes into action to search for details,
  * related movies, as well as allowing you to make it favorite or not
  *
- * @property detailsViewModel of our business layer, responsible for searching the movie details
+ * @property detailsPresenter of our business layer, responsible for searching the movie details
  * @property movieDetails Movie selected for detail viewing
  * @property pagedRelatedMovies Contains the page, the total pages, the total films and the updated films
  * @property relatedAdapter Used to adapt RecyclerView data and respond to your changes
@@ -32,9 +34,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * @author Silas at 24/02/2020
  */
 
-class DetailMovieActivity : GenericActivity(), View.OnClickListener {
+class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsContract.View {
 
-    private val detailsViewModel by viewModel<DetailsViewModel>()
+    private val detailsPresenter by inject<DetailsPresenter> {
+        parametersOf(this)
+    }
     private lateinit var movieDetails: Movie
 
     private lateinit var pagedRelatedMovies: PagedMovies
@@ -45,12 +49,6 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
         initViews()
-        observeLoadDetails()
-        observeIsFavorite()
-        observeUpdateFavorite()
-        observeRelatedMovies()
-        observeLoading()
-        observeMessage()
         loadDetails()
     }
 
@@ -102,66 +100,13 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
         text_view_detail_movie_synopsis_description.text = movieDetails.overview
     }
 
-    private fun observeLoading(){
-        detailsViewModel.loadingLiveData.observe(this, Observer { state ->
-            when (state.name) {
-                LoadingState.SHOW.name -> showProgress()
-                LoadingState.HIDE.name -> hideProgress()
-            }
-        })
-    }
+    private fun loadDetails() = detailsPresenter.loadDetails(movieDetails.id)
 
-    private fun observeLoadDetails() {
-        detailsViewModel.movieDetailsLiveData.observe(this, Observer { details ->
-            details?.let {
-                movieDetails = it
-                loadViews()
-                checkIsFavorite(it.id)
-                loadRelated()
-                initListeners()
-            }
-        })
-    }
+    private fun checkIsFavorite(movieId: Long) = detailsPresenter.checkFavoriteId(movieId)
 
-    private fun observeIsFavorite() {
-        detailsViewModel.movieDetailsLiveData.observe(this, Observer {
-            movieDetails.hasFavorite = it?.hasFavorite ?: false
-            updateViewFavorite()
-        })
-    }
+    private fun loadRelated() = detailsPresenter.loadRelated(currentPageRelated, movieDetails.id)
 
-    private fun observeRelatedMovies() {
-        detailsViewModel.pagedRelatedLiveData.observe(this, Observer {
-            if (currentPageRelated > 1) {
-                this.pagedRelatedMovies.updateMovies(it)
-                this.relatedAdapter.notifyDataSetChanged()
-            } else {
-                this.pagedRelatedMovies = it
-                setUpRecyclerView()
-            }
-        })
-    }
-
-    private fun observeUpdateFavorite() {
-        detailsViewModel.updateFavoritesLiveData.observe(this, Observer {
-            updateViewFavorite()
-            onMessage(getString(R.string.detail_movie_favorite_message))
-        })
-    }
-
-    private fun observeMessage(){
-        detailsViewModel.errorLiveData.observe(this, Observer { message ->
-            onMessage(message)
-        })
-    }
-
-    private fun loadDetails() = detailsViewModel.loadDetails(movieDetails.id)
-
-    private fun checkIsFavorite(movieId: Long) = detailsViewModel.loadFavoriteId(movieId)
-
-    private fun loadRelated() = detailsViewModel.loadRelated(currentPageRelated, movieDetails.id)
-
-    private fun updateFavorite() = detailsViewModel.updateFavorite(movieDetails)
+    private fun updateFavorite() = detailsPresenter.updateFavorite(movieDetails)
 
     private fun setUpRecyclerView() {
         recycler_view_detail_movie.layoutManager = GridLayoutManager(
@@ -195,5 +140,47 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener {
                 myGetDrawable(
                     if (movieDetails.hasFavorite) R.drawable.ic_favorite
                     else R.drawable.ic_not_favorite))
+    }
+
+    override fun updateMovieDetails(movies: Movie) {
+        movieDetails = movies
+        loadViews()
+        checkIsFavorite(movies.id)
+        loadRelated()
+        initListeners()
+    }
+
+    override fun responseFavorite(movie: Movie?){
+        movieDetails.hasFavorite = movie?.hasFavorite ?: false
+        updateViewFavorite()
+    }
+
+    override fun updateRelated(pagedRelated: PagedMovies) {
+        if (currentPageRelated > 1) {
+            this.pagedRelatedMovies.updateMovies(pagedRelated)
+            this.relatedAdapter.notifyDataSetChanged()
+        } else {
+            this.pagedRelatedMovies = pagedRelated
+            setUpRecyclerView()
+        }
+    }
+
+    override fun updateFavorite(isSuccess: Boolean) {
+        updateViewFavorite()
+        onMessage(
+            if (movieDetails.hasFavorite && isSuccess) getString(R.string.detail_movie_favorite_message)
+            else getString(R.string.detail_movie_not_favorite_message)
+        )
+    }
+
+    override fun responseError(message: String) {
+        onMessage(message)
+    }
+
+    override fun updateLoading(state: LoadingState) {
+        when (state.name) {
+            LoadingState.SHOW.name -> showProgress()
+            LoadingState.HIDE.name -> hideProgress()
+        }
     }
 }

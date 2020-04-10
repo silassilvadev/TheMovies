@@ -8,20 +8,17 @@ import com.silas.themovies.ui.main.presenter.MoviesPresenter
 import io.mockk.*
 import io.reactivex.Maybe
 import io.reactivex.Single
-import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Test
 
-@ExperimentalCoroutinesApi
 class MoviesViewModelTest: BaseMoviesTest() {
 
-    private val view: MoviesContract.View = mockk(relaxed = true)
-    private lateinit var presenter: MoviesContract.Presenter
-
+    private val moviesView: MoviesContract.View = mockk(relaxed = true)
+    private lateinit var moviesPresenter: MoviesContract.Presenter
 
     @Before
-    internal fun setUp() {
-        presenter = MoviesPresenter(view, compositeDisposable, repository)
+    fun setUp() {
+        moviesPresenter = MoviesPresenter(moviesView, compositeDisposable, repository)
     }
 
     @Test
@@ -29,34 +26,34 @@ class MoviesViewModelTest: BaseMoviesTest() {
         //Given
         every {
             repository.loadPopulars(any())
-        } answers { Single.error(Throwable("Invalid data returned")) }
+        } returns Single.error(Throwable("Invalid data returned"))
 
         //When
-        presenter.getPopulars(-1)
+        moviesPresenter.getPopulars()
 
         //Then
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.responseError(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.responseError(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
     @Test
-    fun `Searching for popular movies returns error`() {
+    fun `Search popular movies returns error`() {
         //Given
         every {
             repository.searchPopulars(any())
-        } answers { Single.error(Throwable("Invalid data returned")) }
+        } returns Single.error(Throwable("Invalid data returned"))
 
         //When
-        presenter.getPopulars(1, "Movie non-existent")
+        moviesPresenter.getPopulars(1, "Movie non-existent")
 
         //Then
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.responseError(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.responseError(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
@@ -65,34 +62,34 @@ class MoviesViewModelTest: BaseMoviesTest() {
         //Given
         every {
             repository.loadFavorites()
-        } answers { Maybe.error(Throwable("Invalid data returned")) }
+        } returns Maybe.error(Throwable("Invalid data returned"))
 
         //When
-        presenter.getFavorites("")
+        moviesPresenter.getFavorites()
 
         //Then
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.responseError(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.responseError(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
     @Test
-    fun `Searching for favorite movies returns error`() {
+    fun `Search favorite movies returns error`() {
         //Given
         every {
             repository.searchFavorites(any())
-        } answers { Maybe.error(Throwable("Invalid data returned")) }
+        } returns  Maybe.error(Throwable("Invalid data returned"))
 
         //When
-        presenter.getFavorites("Favorite non-existent")
+        moviesPresenter.getFavorites("Favorite non-existent")
 
         //Then
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.responseError(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.responseError(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
@@ -100,30 +97,29 @@ class MoviesViewModelTest: BaseMoviesTest() {
     fun `Get all popular movies returns successful`() {
         every {
             repository.loadPopulars(any())
-        } returns Single.just(PagedMovies(1, 10000, 500, arrayListOf()))
+        } returns Single.just(mockk())
 
-        presenter.getPopulars(1, "")
+        moviesPresenter.getPopulars()
 
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.updateMovies(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateMovies(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
     @Test
-    fun `Searching for all popular movies returns successful`() {
+    fun `Search all popular movies returns successful`() {
         every {
             repository.searchPopulars(any())
-        } returns Single.just(PagedMovies(1, 10000, 500, arrayListOf(mockk())))
+        } returns Single.just(mockk())
 
-
-        presenter.getPopulars(1, "Parasita")
+        moviesPresenter.getPopulars(1, "Parasita")
 
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.updateMovies(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateMovies(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
@@ -133,27 +129,27 @@ class MoviesViewModelTest: BaseMoviesTest() {
             repository.loadFavorites()
         } returns Maybe.just(arrayListOf())
 
-        presenter.getFavorites("")
+        moviesPresenter.getFavorites()
 
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.updateMovies(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateMovies(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
     @Test
-    fun `Searching for favorite movies returns successful`() {
+    fun `Search favorite movies returns successful`() {
         every {
             repository.searchFavorites(any())
         } returns Maybe.just(arrayListOf(mockk()))
 
-        presenter.getFavorites("Parasita")
+        moviesPresenter.getFavorites("Parasita")
 
         verifyAll {
-            view.updateLoading(LoadingState.SHOW)
-            view.updateMovies(any())
-            view.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateMovies(any())
+            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
@@ -163,17 +159,17 @@ class MoviesViewModelTest: BaseMoviesTest() {
             repository.loadPopulars(any())
         } returns Single.just(mockk(relaxed = true))
 
-        presenter.destroy()
-        presenter.getPopulars()
+        moviesPresenter.destroy()
+        moviesPresenter.getPopulars(1, "")
 
         verify {
             compositeDisposable.dispose()
         }
 
         verify(exactly = 0) {
-            view.updateLoading(any())
-            view.updateLoading(any())
-            view.responseError(any())
+            moviesView.updateLoading(any())
+            moviesView.responseError(any())
+            moviesView.updateLoading(any())
         }
     }
 

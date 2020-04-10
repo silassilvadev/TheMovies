@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.movies
+package com.silas.themovies.ui.main.fragment
 
 import android.view.LayoutInflater
 import android.view.View

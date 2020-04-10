@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import com.silas.themovies.R
 import com.silas.themovies.ui.generic.GenericActivity
-import com.silas.themovies.ui.main.MainActivity
+import com.silas.themovies.ui.main.activity.MainActivity
 import com.silas.themovies.utils.extensions.animateFade
 import com.silas.themovies.utils.extensions.startActivity
 import kotlinx.android.synthetic.main.activity_splash_screen.*

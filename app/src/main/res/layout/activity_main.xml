@@ -8,4 +8,4 @@
     android:padding="8dp"
     android:background="@color/colorPrimaryDark"
     tools:listitem="@layout/item_movie"
-    tools:context=".ui.main.MainActivity"/>
+    tools:context=".ui.main.activity.MainActivity"/>

@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.movies
+package com.silas.themovies.ui.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,13 +10,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.silas.themovies.R
 import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.ui.LoadingState
-import com.silas.themovies.ui.detail.DetailMovieActivity
+import com.silas.themovies.ui.detail.activity.DetailMovieActivity
 import com.silas.themovies.ui.generic.GenericFragment
-import com.silas.themovies.ui.main.MainActivity
+import com.silas.themovies.ui.main.TypeFragment
+import com.silas.themovies.ui.main.activity.MainActivity
 import com.silas.themovies.ui.main.presenter.MoviesContract
 import com.silas.themovies.ui.main.presenter.MoviesPresenter
 import com.silas.themovies.utils.extensions.*
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_movies.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -85,7 +85,9 @@ class MoviesFragment(internal val typeFragment: TypeFragment): GenericFragment()
     internal fun loadMovies(query: String = "", page: Int = 1) {
         currentQuery = query
         currentPage = page
-        if (typeFragment == TypeFragment.POPULARS) moviesPresenter.getPopulars(currentPage, currentQuery) else moviesPresenter.getFavorites(currentQuery)
+        if (typeFragment == TypeFragment.POPULARS) {
+            moviesPresenter.getPopulars(currentPage, currentQuery)
+        } else moviesPresenter.getFavorites(currentQuery)
     }
 
     private fun initListeners(){

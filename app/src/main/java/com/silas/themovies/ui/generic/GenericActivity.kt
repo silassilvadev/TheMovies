@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import com.silas.themovies.R
-import com.silas.themovies.ui.IViewProtocol
-import com.silas.themovies.ui.main.MainActivity
+import com.silas.themovies.ui.main.activity.MainActivity
 import com.silas.themovies.utils.extensions.animateTransition
 import com.silas.themovies.utils.extensions.getContentView
 import com.silas.themovies.utils.extensions.hideProgress

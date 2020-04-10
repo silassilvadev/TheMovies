@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:fitsSystemWindows="true"
-    tools:context="com.silas.themovies.ui.detail.DetailMovieActivity">
+    tools:context="com.silas.themovies.ui.detail.activity.DetailMovieActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout_detail_movie"

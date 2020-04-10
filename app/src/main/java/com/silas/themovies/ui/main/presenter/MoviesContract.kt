@@ -4,6 +4,7 @@ import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.ui.LoadingState
 
 interface MoviesContract {
+
     interface View {
         fun updateMovies(pagedMovies: PagedMovies)
         fun responseError(message: String)
@@ -15,4 +16,5 @@ interface MoviesContract {
         fun getFavorites(query: String = "")
         fun destroy()
     }
+
 }
