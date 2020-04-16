@@ -1,6 +1,7 @@
 package com.silas.themovies.ui.main.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
@@ -36,12 +37,11 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, MenuItem
         setContentView(R.layout.activity_main_movies)
         setUpCustomToolbar(toolbar_main, getString(R.string.main_toolbar_title), false)
         initViews()
+        setUpTransitionAnimations()
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        query?.let { itQuery ->
-            loadInCurrentFragment(itQuery)
-        }
+        loadInCurrentFragment(query ?: "")
         return false
     }
 
@@ -57,17 +57,15 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, MenuItem
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         tab_layout_main.isVisible = true
-        onQueryTextChange("")
         return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.let {
             menuInflater.inflate(R.menu.main_toolbar, it)
-            itemSearch = it.findItem(R.id.item_toolbar_search).apply {
-                title = getSearchTitle()
-            }
+            itemSearch = it.findItem(R.id.item_toolbar_search)
             searchView = itemSearch.actionView as SearchView
+            searchView.queryHint = getSearchTitle()
             setUpListeners()
         }
         return super.onCreateOptionsMenu(menu)
@@ -82,17 +80,20 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, MenuItem
         ).apply {
             view_pager_main_container.adapter = this
         }
-
-        coordinator_layout_main.setupAllAnimations(true)
         tab_layout_main.setupWithViewPager(view_pager_main_container, false)
+    }
+
+    private fun setUpTransitionAnimations(){
+        app_bar_layout_main.setupAllAnimations()
+        tab_layout_main.setupAllAnimations()
     }
 
     private fun setUpListeners(){
         searchView.setOnQueryTextListener(this)
         itemSearch.setOnActionExpandListener(this)
-        view_pager_main_container.onPageChangeListener {
-            itemSearch.title = getSearchTitle(it)
-        }
+        view_pager_main_container.onPageChangeListener(onPageSelected =  {
+            searchView.queryHint = getSearchTitle(it)
+        })
     }
 
     /**
