@@ -4,8 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ScrollingView
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.silas.themovies.R
 
@@ -52,6 +56,7 @@ fun Fragment.hideProgress() = (activity as? AppCompatActivity)?.hideProgress()
  */
 fun Fragment.addSwipeRefreshRoot(childId: Int, vararg functions: (() -> Unit)?): View? {
     return activity?.let { itFragmentActivity ->
+
         val swipeRefreshLayout = SwipeRefreshLayout(itFragmentActivity).apply {
             setColorSchemeColors(context.myGetColor(R.color.colorAccent))
             setOnRefreshListener {
@@ -62,7 +67,6 @@ fun Fragment.addSwipeRefreshRoot(childId: Int, vararg functions: (() -> Unit)?):
                 }
             }
         }
-
 
         View.inflate(context, childId, swipeRefreshLayout).apply {
             layoutParams = ViewGroup.LayoutParams(

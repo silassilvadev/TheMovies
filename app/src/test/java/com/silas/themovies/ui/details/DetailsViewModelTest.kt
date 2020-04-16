@@ -1,7 +1,7 @@
 package com.silas.themovies.ui.details
 
 import com.silas.themovies.model.BaseMoviesTest
-import com.silas.themovies.model.dto.response.Movie
+import com.silas.themovies.model.entity.Movie
 import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.presenter.DetailsContract
 import com.silas.themovies.ui.detail.presenter.DetailsPresenter
@@ -57,7 +57,7 @@ class DetailsViewModelTest : BaseMoviesTest() {
             repository.checkFavoriteId(any())
         } returns Maybe.error(Throwable("Invalid favorites"))
 
-        detailsPresenter.checkFavoriteId(-1)
+        detailsPresenter.checkIsFavorite(-1)
 
         verify {
             detailsView.updateLoading(LoadingState.SHOW)
@@ -140,11 +140,11 @@ class DetailsViewModelTest : BaseMoviesTest() {
             repository.checkFavoriteId(any())
         } returns Maybe.just(mockk())
 
-        detailsPresenter.checkFavoriteId(1)
+        detailsPresenter.checkIsFavorite(1)
 
         verify {
             detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.responseFavorite(any())
+            detailsView.isFavorite(any())
             detailsView.updateLoading(LoadingState.HIDE)
         }
     }

@@ -1,6 +1,6 @@
 package com.silas.themovies.utils.extensions
 
-import com.silas.themovies.model.dto.response.Genre
+import com.silas.themovies.model.entity.Genre
 
 /**
  * Converts a list to text

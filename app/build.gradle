@@ -6,6 +6,9 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -24,12 +27,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "THE_MOVIES_URL", urlPrd
             buildConfigField "String", "DOWNLOAD_IMAGE_URL", urlDownloadPrd
+            buildConfigField "String", "API_KEY", localProperties['apiKey']
+            buildConfigField "String", "API_LANGUAGE", localProperties["apiLanguage"]
         }
 
         debug {
             debuggable true
             buildConfigField "String", "THE_MOVIES_URL", urlDev
             buildConfigField "String", "DOWNLOAD_IMAGE_URL", urlDownloadDev
+            buildConfigField "String", "API_KEY", localProperties['apiKey']
+            buildConfigField "String", "API_LANGUAGE", localProperties["apiLanguage"]
         }
     }
 

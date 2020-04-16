@@ -2,7 +2,7 @@ package com.silas.themovies.utils.extensions
 
 import android.content.Intent
 import android.os.Parcelable
-import com.silas.themovies.model.dto.response.Movie
+import com.silas.themovies.model.entity.Movie
 import io.mockk.mockk
 import org.junit.Assert.assertTrue
 import org.junit.Before

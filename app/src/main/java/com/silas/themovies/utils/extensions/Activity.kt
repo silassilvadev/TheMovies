@@ -5,6 +5,8 @@ import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ScrollingView
+import androidx.core.view.children
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.silas.themovies.R
 import com.silas.themovies.utils.custom.ProgressDialogCustom
@@ -59,6 +61,16 @@ fun Activity.addSwipeRefreshRoot(childId: Int, vararg functions: (() -> Unit)?):
                 if (isRefreshing) isRefreshing = false
             }
         }
+    }
+
+    swipeRefreshLayout.setOnChildScrollUpCallback { parent, _ ->
+
+        parent.children.forEach {
+            if (it is ScrollingView) {
+                swipeRefreshLayout.isEnabled = it.scrollY <= 0
+            }
+        }
+        true
     }
 
     return View.inflate(this, childId, swipeRefreshLayout).apply {

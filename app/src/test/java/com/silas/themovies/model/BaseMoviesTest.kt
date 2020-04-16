@@ -1,7 +1,6 @@
 package com.silas.themovies.model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.silas.themovies.data.remote.repository.MoviesRepository
 import com.silas.themovies.utils.RxSchedulerRule
 import io.mockk.mockk
 import io.reactivex.disposables.CompositeDisposable
@@ -10,7 +9,7 @@ import org.junit.Rule
 
 abstract class BaseMoviesTest {
 
-    val repository = mockk<MoviesRepository>(relaxed = true)
+    val repository = mockk<OldMoviesRepository>(relaxed = true)
     val compositeDisposable = mockk<CompositeDisposable>(relaxed = true)
 
     @get:Rule

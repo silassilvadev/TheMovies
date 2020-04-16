@@ -15,10 +15,11 @@
     <string name="main_toolbar_title">The Movies</string>
     <string name="main_toolbar_title_populars">Populares</string>
     <string name="main_toolbar_title_favorites">Favoritos</string>
-    <string name="main_toolbar_search_title">Pesquisar</string>
+    <string name="main_toolbar_search_movies_hint">Pesquisar todos os filmes</string>
+    <string name="main_toolbar_search_favorites_hint">Pesquisar favoritos</string>
     <string name="main_item_movie_text_popularity_description">%1$s visualizações</string>
     <string name="main_item_movie_vote_average">%1$s %%</string>
-    
+
     <string name="main_tab_item_populars">Populares</string>
     <string name="main_tab_item_favorites">Favoritos</string>
 
@@ -36,6 +37,9 @@
     <string name="detail_movie_not_favorite_message">Removido dos favoritos</string>
     <string name="detail_movie_error_data_init">Ocorreu um erro inexperado</string>
     <string name="detail_movie_text_title_related">Relacionados</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- endregion -->
 
 </resources>

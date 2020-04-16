@@ -1,10 +1,8 @@
 package com.silas.themovies.ui.movies
 
 import com.silas.themovies.model.BaseMoviesTest
-import com.silas.themovies.model.dto.response.PagedMovies
 import com.silas.themovies.ui.LoadingState
-import com.silas.themovies.ui.main.presenter.MoviesContract
-import com.silas.themovies.ui.main.presenter.MoviesPresenter
+import com.silas.themovies.ui.main.fragment.favorites.FavoritesPresenter
 import io.mockk.*
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -18,7 +16,7 @@ class MoviesViewModelTest: BaseMoviesTest() {
 
     @Before
     fun setUp() {
-        moviesPresenter = MoviesPresenter(moviesView, compositeDisposable, repository)
+        moviesPresenter = FavoritesPresenter(moviesView, compositeDisposable, repository)
     }
 
     @Test
