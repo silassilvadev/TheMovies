@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.fragment.favorites
+package com.silas.themovies.ui.main.presenter.favorites
 
 import com.silas.themovies.model.entity.Movie
 import com.silas.themovies.ui.LoadingState
@@ -12,7 +12,7 @@ interface FavoritesContract {
     }
 
     interface Presenter {
-        fun loadMovies(query: String = "")
+        fun loadFavorites(query: String = "")
         fun destroy()
     }
 }

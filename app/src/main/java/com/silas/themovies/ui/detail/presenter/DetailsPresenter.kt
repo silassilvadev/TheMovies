@@ -17,7 +17,6 @@ class DetailsPresenter(var view: DetailsContract.View?,
         private const val PERSISTENCE_ERROR = "Ocorreu um erro inexperado"
     }
 
-    private lateinit var movie: Movie
     private var currentPageRelated = INITIAL_PAGE_RELATED
     private var currentPagedMoviesRelated = PagedMovies()
 
@@ -30,7 +29,6 @@ class DetailsPresenter(var view: DetailsContract.View?,
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        this@DetailsPresenter.movie = it
                         updateLoading(LoadingState.HIDE)
                         updateMovieDetails(it)
                     }, {
@@ -41,11 +39,11 @@ class DetailsPresenter(var view: DetailsContract.View?,
         }
     }
 
-    override fun loadRelated(isNextPage: Boolean) {
-        if (isNextPage) currentPageRelated++
+    override fun loadRelated(movieId: Long, isNextPage: Boolean) {
+        if (isNextPage) this.currentPageRelated++
 
         compositeDisposable.addAll(
-            detailsRepository.loadRelated(this.currentPageRelated, this.movie.id)
+            detailsRepository.loadRelated(this.currentPageRelated, movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -55,56 +53,54 @@ class DetailsPresenter(var view: DetailsContract.View?,
                 })
         )
     }
-    override fun checkIsFavorite() {
+    override fun checkIsFavorite(movieId: Long) {
         compositeDisposable.addAll(
-            detailsRepository.checkFavoriteId(this.movie.id)
+            detailsRepository.checkFavoriteId(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ movie ->
-
                     movie?.let {
-                        this.movie = it
-                        view?.isFavorite(this.movie.hasFavorite)
-                    } ?: error(PERSISTENCE_ERROR)
+                        view?.isFavorite(it.hasFavorite)
+                    } ?: run {
+                        view?.responseError(PERSISTENCE_ERROR)
+                    }
                 }, {
                     updateError(it)
                 })
         )
     }
 
-    override fun updateFavorite() {
-        this.movie.hasFavorite = !this.movie.hasFavorite
-        if (this.movie.hasFavorite) saveFavorite() else removeFavorite()
+    override fun updateFavorite(movie: Movie) {
+        if (movie.hasFavorite) saveFavorite(movie) else removeFavorite(movie)
     }
-
 
     override fun destroy() {
         compositeDisposable.dispose()
         view = null
     }
 
-    private fun saveFavorite() {
+    private fun saveFavorite(movie: Movie) {
         compositeDisposable.addAll(
-            detailsRepository.insertFavorite(this.movie)
+            detailsRepository.insertFavorite(movie)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    if (!it.isNullOrEmpty()) view?.updateFavorite(this.movie.hasFavorite)
-                    else error(PERSISTENCE_ERROR)
+                    if (!it.isNullOrEmpty()) view?.updateFavorite(movie.hasFavorite)
+                    else view?.responseError(PERSISTENCE_ERROR)
                 }, {
                     updateError(it)
                 })
         )
     }
 
-    private fun removeFavorite() {
+    private fun removeFavorite(movie: Movie) {
         compositeDisposable.addAll(
-            detailsRepository.deleteFavorite(this.movie)
+            detailsRepository.deleteFavorite(movie)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    if (it > 0) view?.updateFavorite(this.movie.hasFavorite)
-                    else error(PERSISTENCE_ERROR)
+                    if (it > 0) view?.updateFavorite(movie.hasFavorite)
+                    else view?.responseError(PERSISTENCE_ERROR)
                 }, {
                     updateError(it)
                 })

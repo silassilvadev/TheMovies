@@ -1,9 +1,9 @@
-package com.silas.themovies.ui.main.fragment.populars
+package com.silas.themovies.ui.main.presenter.movies
 
 import com.silas.themovies.model.entity.PagedMovies
 import com.silas.themovies.ui.LoadingState
 
-interface PopularsContract {
+interface MoviesContract {
 
     interface View {
         fun updateMovies(pagedMovies: PagedMovies)

@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.fragment.favorites
+package com.silas.themovies.ui.main.presenter.favorites
 
 import com.silas.themovies.data.repository.favorites.FavoritesRepository
 import com.silas.themovies.model.entity.Movie
@@ -17,7 +17,7 @@ class FavoritesPresenter(var view: FavoritesContract.View?,
         view = null
     }
 
-    override fun loadMovies(query: String) {
+    override fun loadFavorites(query: String) {
         if (query.isNotEmpty()) searchFavorites(query) else loadFavorites()
     }
 

@@ -13,10 +13,10 @@ import com.silas.themovies.data.sources.remote.service.MoviesService
 import com.silas.themovies.data.sources.remote.service.DetailsService
 import com.silas.themovies.ui.detail.presenter.DetailsContract
 import com.silas.themovies.ui.detail.presenter.DetailsPresenter
-import com.silas.themovies.ui.main.fragment.populars.PopularsContract
-import com.silas.themovies.ui.main.fragment.populars.PopularsPresenter
-import com.silas.themovies.ui.main.fragment.favorites.FavoritesContract
-import com.silas.themovies.ui.main.fragment.favorites.FavoritesPresenter
+import com.silas.themovies.ui.main.presenter.movies.MoviesContract
+import com.silas.themovies.ui.main.presenter.movies.MoviesPresenter
+import com.silas.themovies.ui.main.presenter.favorites.FavoritesContract
+import com.silas.themovies.ui.main.presenter.favorites.FavoritesPresenter
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.dsl.module
 
@@ -36,8 +36,14 @@ object ModulesFactory {
     }
 
     private val presenterModule = module {
-        factory { (view: PopularsContract.View) -> PopularsPresenter(view, get(), get()) }
-        factory { (view: FavoritesContract.View) -> FavoritesPresenter(view, get(), get()) }
+        factory { (view: MoviesContract.View) -> MoviesPresenter(view, get(), get()) }
+        factory { (view: FavoritesContract.View) ->
+            FavoritesPresenter(
+                view,
+                get(),
+                get()
+            )
+        }
         factory { (view: DetailsContract.View) -> DetailsPresenter(view, get(), get()) }
     }
 

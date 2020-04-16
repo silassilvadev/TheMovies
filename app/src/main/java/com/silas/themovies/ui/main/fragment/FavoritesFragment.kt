@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.fragment.favorites
+package com.silas.themovies.ui.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,8 @@ import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.activity.DetailMovieActivity
 import com.silas.themovies.ui.generic.GenericFragment
 import com.silas.themovies.ui.main.activity.MainActivity
-import com.silas.themovies.ui.main.fragment.MoviesAdapter
+import com.silas.themovies.ui.main.presenter.favorites.FavoritesContract
+import com.silas.themovies.ui.main.presenter.favorites.FavoritesPresenter
 import com.silas.themovies.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_movies.*
 import org.koin.android.ext.android.inject
@@ -20,7 +21,8 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Silas at 26/02/2020
  */
-class FavoritesFragment: GenericFragment(), FavoritesContract.View {
+class FavoritesFragment: GenericFragment(),
+    FavoritesContract.View {
 
     private lateinit var moviesAdapter: MoviesAdapter
     private var layoutManager: GridLayoutManager? = null
@@ -34,7 +36,7 @@ class FavoritesFragment: GenericFragment(), FavoritesContract.View {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return addSwipeRefreshRoot(R.layout.fragment_movies, { favoritesPresenter.loadMovies() })
+        return addSwipeRefreshRoot(R.layout.fragment_movies, { favoritesPresenter.loadFavorites() })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,7 +46,7 @@ class FavoritesFragment: GenericFragment(), FavoritesContract.View {
 
     override fun onResume() {
         super.onResume()
-        favoritesPresenter.loadMovies()
+        favoritesPresenter.loadFavorites()
     }
 
     override fun onPause() {
@@ -52,7 +54,7 @@ class FavoritesFragment: GenericFragment(), FavoritesContract.View {
         currentScrollPosition = layoutManager?.findFirstVisibleItemPosition() ?: 0
     }
 
-    internal fun searchFavorites(query: String) = favoritesPresenter.loadMovies(query)
+    internal fun searchFavorites(query: String) = favoritesPresenter.loadFavorites(query)
 
     private fun setUpRecyclerView(){
         this.moviesAdapter = MoviesAdapter { movie ->

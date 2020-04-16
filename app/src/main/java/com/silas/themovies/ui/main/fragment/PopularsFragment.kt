@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.fragment.populars
+package com.silas.themovies.ui.main.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,7 +12,8 @@ import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.activity.DetailMovieActivity
 import com.silas.themovies.ui.generic.GenericFragment
 import com.silas.themovies.ui.main.activity.MainActivity
-import com.silas.themovies.ui.main.fragment.MoviesAdapter
+import com.silas.themovies.ui.main.presenter.movies.MoviesContract
+import com.silas.themovies.ui.main.presenter.movies.MoviesPresenter
 import com.silas.themovies.utils.custom.PaginationListener
 import com.silas.themovies.utils.extensions.addSwipeRefreshRoot
 import com.silas.themovies.utils.extensions.hideProgress
@@ -25,10 +26,11 @@ import org.koin.core.parameter.parametersOf
 /**
  * A simple [Fragment] subclass.
  */
-class PopularsFragment: GenericFragment(), PopularsContract.View {
+class PopularsFragment: GenericFragment(),
+    MoviesContract.View {
 
     private lateinit var moviesAdapter: MoviesAdapter
-    private val popularsPresenter by inject<PopularsPresenter> {
+    private val popularsPresenter by inject<MoviesPresenter> {
         parametersOf(this)
     }
 

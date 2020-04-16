@@ -40,13 +40,13 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
         parametersOf(this)
     }
     private var paginationListener: PaginationListener? = null
-    private var movie: Movie? = null
+    private lateinit var movie: Movie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
 
-        if (isReceiveParams()) detailsPresenter.loadDetails(this.movie?.id ?: 0L)
+        if (isReceiveParams()) detailsPresenter.loadDetails(this.movie.id)
         else onMessage(getString(R.string.detail_movie_error_data_init))
 
         initViews()
@@ -55,7 +55,9 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
     override fun onClick(view: View?) {
         view?.let {
             when (it) {
-                image_view_detail_movie_favorite -> detailsPresenter.updateFavorite()
+                image_view_detail_movie_favorite -> detailsPresenter.updateFavorite(this.movie.apply {
+                    hasFavorite = !hasFavorite
+                })
             }
         }
     }
@@ -102,10 +104,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
 
     private fun initViews(){
         setUpRecyclerView()
-        setUpCustomToolbar(
-            toolbar_movie_detail,
-            this.movie?.title ?: getString(R.string.main_toolbar_title),
-            true)
+        setUpCustomToolbar(toolbar_movie_detail, this.movie.title, true)
     }
 
     private fun setUpRecyclerView() {
@@ -124,7 +123,7 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
     private fun setUpPaginationRelated(totalResults: Int){
         if (this.paginationListener == null) {
             this.paginationListener = PaginationListener(totalResults) {
-                this.detailsPresenter.loadRelated(true)
+                this.detailsPresenter.loadRelated(this.movie.id, true)
                 paginationListener?.isLoadingEnable = true
             }.apply {
                 recycler_view_detail_movie.addOnScrollListener(this)
@@ -133,7 +132,6 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
     }
 
     private fun updateViews(updatedMovie: Movie) {
-        title = updatedMovie.title
         image_view_detail_movie.setUpImage(
             BackDropType.W_500.resolution + updatedMovie.endPointBackDrop
         )
@@ -152,8 +150,8 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
     }
 
     private fun loadDataRelated() {
-        detailsPresenter.checkIsFavorite()
-        detailsPresenter.loadRelated()
+        detailsPresenter.checkIsFavorite(this.movie.id)
+        detailsPresenter.loadRelated(this.movie.id)
         paginationListener?.isLoadingEnable = true
     }
 

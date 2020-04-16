@@ -7,11 +7,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.silas.themovies.R
 import com.silas.themovies.ui.generic.GenericActivity
-import com.silas.themovies.ui.main.fragment.favorites.FavoritesFragment
-import com.silas.themovies.ui.main.fragment.populars.PopularsFragment
+import com.silas.themovies.ui.main.fragment.FavoritesFragment
+import com.silas.themovies.ui.main.fragment.PopularsFragment
 import com.silas.themovies.utils.extensions.onPageChangeListener
 import com.silas.themovies.utils.extensions.setupAllAnimations
-import kotlinx.android.synthetic.main.activity_detail_movie.*
 import kotlinx.android.synthetic.main.activity_main_movies.*
 
 /**
@@ -76,7 +75,10 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, MenuItem
 
     private fun initViews() {
         this.viewPagerAdapter = MainViewPagerAdapter(
-            arrayListOf(PopularsFragment(), FavoritesFragment()), this
+            arrayListOf(
+                PopularsFragment(),
+                FavoritesFragment()
+            ), this
         ).apply {
             view_pager_main_container.adapter = this
         }

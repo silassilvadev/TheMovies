@@ -1,4 +1,4 @@
-package com.silas.themovies.ui.main.fragment.populars
+package com.silas.themovies.ui.main.presenter.movies
 
 import com.silas.themovies.data.repository.movies.MoviesRepository
 import com.silas.themovies.model.entity.PagedMovies
@@ -7,9 +7,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class PopularsPresenter(var view: PopularsContract.View?,
-                        private val compositeDisposable: CompositeDisposable,
-                        private val moviesRepository: MoviesRepository): PopularsContract.Presenter {
+class MoviesPresenter(var view: MoviesContract.View?,
+                      private val compositeDisposable: CompositeDisposable,
+                      private val moviesRepository: MoviesRepository): MoviesContract.Presenter {
 
     companion object {
         private const val INITIAL_PAGE = 1

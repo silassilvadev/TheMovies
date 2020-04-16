@@ -17,9 +17,9 @@ interface DetailsContract {
 
     interface Presenter {
         fun loadDetails(movieId: Long)
-        fun loadRelated(isNextPage: Boolean = false)
-        fun updateFavorite()
-        fun checkIsFavorite()
+        fun loadRelated(movieId: Long, isNextPage: Boolean = false)
+        fun updateFavorite(movie: Movie)
+        fun checkIsFavorite(movieId: Long)
         fun destroy()
     }
 }

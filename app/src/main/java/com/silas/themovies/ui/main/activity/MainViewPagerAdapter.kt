@@ -3,10 +3,9 @@ package com.silas.themovies.ui.main.activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager.widget.ViewPager
 import com.silas.themovies.R
-import com.silas.themovies.ui.main.fragment.favorites.FavoritesFragment
-import com.silas.themovies.ui.main.fragment.populars.PopularsFragment
+import com.silas.themovies.ui.main.fragment.FavoritesFragment
+import com.silas.themovies.ui.main.fragment.PopularsFragment
 
 /**
  * Fragments adapter with ViewPagers of movies

@@ -1,4 +1,4 @@
-package com.silas.themovies.model
+package com.silas.themovies.utils
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.silas.themovies.utils.RxSchedulerRule
@@ -8,9 +8,6 @@ import org.junit.ClassRule
 import org.junit.Rule
 
 abstract class BaseMoviesTest {
-
-    val repository = mockk<OldMoviesRepository>(relaxed = true)
-    val compositeDisposable = mockk<CompositeDisposable>(relaxed = true)
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
