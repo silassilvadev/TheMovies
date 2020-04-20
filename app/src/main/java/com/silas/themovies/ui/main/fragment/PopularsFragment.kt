@@ -14,6 +14,7 @@ import com.silas.themovies.ui.generic.GenericFragment
 import com.silas.themovies.ui.main.activity.MainActivity
 import com.silas.themovies.ui.main.presenter.movies.MoviesContract
 import com.silas.themovies.ui.main.presenter.movies.MoviesPresenter
+import com.silas.themovies.ui.main.presenter.movies.MoviesPresenter.Companion.ITEMS_PAGE
 import com.silas.themovies.utils.custom.PaginationListener
 import com.silas.themovies.utils.extensions.addSwipeRefreshRoot
 import com.silas.themovies.utils.extensions.hideProgress
@@ -45,23 +46,23 @@ class PopularsFragment: GenericFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+        setPaginationListener()
         popularsPresenter.loadMovies()
     }
 
     override fun updateMovies(pagedMovies: PagedMovies) {
         this.moviesAdapter.updateMovies(pagedMovies.results)
-        setPaginationListener(pagedMovies.totalResults)
     }
 
     override fun responseError(message: String) = onMessage(message)
 
     override fun updateLoading(state: LoadingState){
-        when (state.name) {
-            LoadingState.SHOW.name -> {
+        when (state) {
+            LoadingState.Show -> {
                 paginationListener?.isLoadingEnable = true
                 showProgress()
             }
-            LoadingState.HIDE.name -> {
+            LoadingState.Hide -> {
                 paginationListener?.isLoadingEnable = false
                 hideProgress()
             }
@@ -76,13 +77,11 @@ class PopularsFragment: GenericFragment(),
         recycler_view_movies.adapter = this.moviesAdapter
     }
 
-    private fun setPaginationListener(totalResults: Int){
-        if (this.paginationListener == null) {
-            this.paginationListener = PaginationListener(totalResults) {
-                this.popularsPresenter.loadMovies(isNextPage = true)
-            }.apply {
-                recycler_view_movies.addOnScrollListener(this)
-            }
+    private fun setPaginationListener(){
+        this.paginationListener = PaginationListener(ITEMS_PAGE) {
+            this.popularsPresenter.loadMovies(isNextPage = true)
+        }.apply {
+            recycler_view_movies.addOnScrollListener(this)
         }
     }
 

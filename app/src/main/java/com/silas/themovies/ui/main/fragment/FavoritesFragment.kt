@@ -21,8 +21,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Silas at 26/02/2020
  */
-class FavoritesFragment: GenericFragment(),
-    FavoritesContract.View {
+class FavoritesFragment: GenericFragment(), FavoritesContract.View {
 
     private lateinit var moviesAdapter: MoviesAdapter
     private var layoutManager: GridLayoutManager? = null
@@ -81,9 +80,9 @@ class FavoritesFragment: GenericFragment(),
     }
 
     override fun updateLoading(state: LoadingState) {
-        when (state.name) {
-            LoadingState.SHOW.name -> showProgress()
-            LoadingState.HIDE.name -> hideProgress()
+        when (state) {
+            LoadingState.Show -> showProgress()
+            LoadingState.Hide -> hideProgress()
         }
     }
 }

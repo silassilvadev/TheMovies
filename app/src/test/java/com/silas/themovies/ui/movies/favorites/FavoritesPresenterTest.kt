@@ -36,10 +36,10 @@ class FavoritesPresenterTest: BaseMoviesTest() {
 
         //Then
         verifyAll {
-            favoritesView.updateLoading(LoadingState.SHOW)
+            favoritesView.updateLoading(LoadingState.Show)
             favoritesView.updateFavorites(any())
             favoritesView.responseError(any())
-            favoritesView.updateLoading(LoadingState.HIDE)
+            favoritesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -55,9 +55,9 @@ class FavoritesPresenterTest: BaseMoviesTest() {
 
         //Then
         verifyAll {
-            favoritesView.updateLoading(LoadingState.SHOW)
+            favoritesView.updateLoading(LoadingState.Show)
             favoritesView.responseError(any())
-            favoritesView.updateLoading(LoadingState.HIDE)
+            favoritesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -73,10 +73,10 @@ class FavoritesPresenterTest: BaseMoviesTest() {
 
         //Then
         verifyAll {
-            favoritesView.updateLoading(LoadingState.SHOW)
+            favoritesView.updateLoading(LoadingState.Show)
             favoritesView.updateFavorites(any())
             favoritesView.responseError(any())
-            favoritesView.updateLoading(LoadingState.HIDE)
+            favoritesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -92,9 +92,9 @@ class FavoritesPresenterTest: BaseMoviesTest() {
 
         //Then
         verifyAll {
-            favoritesView.updateLoading(LoadingState.SHOW)
+            favoritesView.updateLoading(LoadingState.Show)
             favoritesView.responseError(any())
-            favoritesView.updateLoading(LoadingState.HIDE)
+            favoritesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -107,9 +107,9 @@ class FavoritesPresenterTest: BaseMoviesTest() {
         favoritesPresenter.loadFavorites()
 
         verifyAll {
-            favoritesView.updateLoading(LoadingState.SHOW)
+            favoritesView.updateLoading(LoadingState.Show)
             favoritesView.updateFavorites(any())
-            favoritesView.updateLoading(LoadingState.HIDE)
+            favoritesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -122,9 +122,9 @@ class FavoritesPresenterTest: BaseMoviesTest() {
         favoritesPresenter.loadFavorites("Parasita")
 
         verifyAll {
-            favoritesView.updateLoading(LoadingState.SHOW)
+            favoritesView.updateLoading(LoadingState.Show)
             favoritesView.updateFavorites(any())
-            favoritesView.updateLoading(LoadingState.HIDE)
+            favoritesView.updateLoading(LoadingState.Hide)
         }
     }
 

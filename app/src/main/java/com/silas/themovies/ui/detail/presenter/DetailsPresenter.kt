@@ -22,17 +22,15 @@ class DetailsPresenter(var view: DetailsContract.View?,
 
     override fun loadDetails(movieId: Long) {
         view?.apply {
-            updateLoading(LoadingState.SHOW)
-
             compositeDisposable.addAll(
                 detailsRepository.loadDetails(movieId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { updateLoading(LoadingState.Show) }
+                    .doFinally { updateLoading(LoadingState.Hide) }
                     .subscribe({
-                        updateLoading(LoadingState.HIDE)
                         updateMovieDetails(it)
                     }, {
-                        updateLoading(LoadingState.HIDE)
                         updateError(it)
                     })
             )

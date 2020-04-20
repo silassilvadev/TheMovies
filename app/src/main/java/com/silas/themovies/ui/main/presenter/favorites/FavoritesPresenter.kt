@@ -9,34 +9,31 @@ import io.reactivex.schedulers.Schedulers
 
 class FavoritesPresenter(var view: FavoritesContract.View?,
                          private val compositeDisposable: CompositeDisposable,
-                         private val favoritesRepository: FavoritesRepository
-): FavoritesContract.Presenter {
+                         private val favoritesRepository: FavoritesRepository): FavoritesContract.Presenter {
+
+    override fun loadFavorites(query: String) {
+        if (query.isNotEmpty()) searchFavorites(query) else loadFavorites()
+    }
 
     override fun destroy() {
         compositeDisposable.dispose()
         view = null
     }
 
-    override fun loadFavorites(query: String) {
-        if (query.isNotEmpty()) searchFavorites(query) else loadFavorites()
-    }
-
     private fun loadFavorites() {
         view?.apply {
-            updateLoading(LoadingState.SHOW)
-
             compositeDisposable.add(
                 favoritesRepository.loadFavorites()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { updateLoading(LoadingState.Show) }
+                    .doFinally { updateLoading(LoadingState.Hide) }
                     .subscribe({
 
                         setUpUpdateMovies(it as ArrayList<Movie>)
-                        updateLoading(LoadingState.HIDE)
                     }, {
 
                         view?.responseError(it.message ?: it.localizedMessage ?: "")
-                        updateLoading(LoadingState.HIDE)
                     })
             )
         }
@@ -44,20 +41,18 @@ class FavoritesPresenter(var view: FavoritesContract.View?,
 
     private fun searchFavorites(query: String) {
         view?.apply {
-            updateLoading(LoadingState.SHOW)
-
             compositeDisposable.add(
                 favoritesRepository.searchFavorites(query)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { updateLoading(LoadingState.Show) }
+                    .doFinally { updateLoading(LoadingState.Hide) }
                     .subscribe({
 
                         setUpUpdateMovies(it as ArrayList<Movie>)
-                        updateLoading(LoadingState.HIDE)
                     }, {
 
                         view?.responseError(it.message ?: it.localizedMessage ?: "")
-                        updateLoading(LoadingState.HIDE)
                     })
             )
         }

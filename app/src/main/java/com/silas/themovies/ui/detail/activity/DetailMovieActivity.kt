@@ -89,9 +89,9 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
     }
 
     override fun updateLoading(state: LoadingState) {
-        when (state.name) {
-            LoadingState.SHOW.name -> showProgress()
-            LoadingState.HIDE.name -> hideProgress()
+        when (state) {
+            LoadingState.Show -> showProgress()
+            LoadingState.Hide -> hideProgress()
         }
     }
 

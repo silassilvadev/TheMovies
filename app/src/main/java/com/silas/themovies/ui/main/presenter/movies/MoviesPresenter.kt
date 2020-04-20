@@ -13,6 +13,7 @@ class MoviesPresenter(var view: MoviesContract.View?,
 
     companion object {
         private const val INITIAL_PAGE = 1
+        const val ITEMS_PAGE = 20
     }
 
     private var currentPage = INITIAL_PAGE
@@ -32,39 +33,31 @@ class MoviesPresenter(var view: MoviesContract.View?,
     }
 
     private fun loadPopulars() {
-        updateLoading(LoadingState.SHOW)
-
         compositeDisposable.addAll(
             moviesRepository.loadPopulars(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { updateLoading(LoadingState.Show) }
+                .doFinally { updateLoading(LoadingState.Hide) }
                 .subscribe({
-
                     updateMovies(it)
-                    updateLoading(LoadingState.HIDE)
                 }, {
-
                     updateError(it)
-                    updateLoading(LoadingState.HIDE)
                 })
         )
     }
 
     private fun searchPopulars(query: String) {
-        updateLoading(LoadingState.SHOW)
-
         compositeDisposable.addAll(
             moviesRepository.searchMovies(currentPage, query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { updateLoading(LoadingState.Show) }
+                .doFinally { updateLoading(LoadingState.Hide) }
                 .subscribe({
-
                     updateMovies(it)
-                    updateLoading(LoadingState.HIDE)
                 }, {
-
                     updateError(it)
-                    updateLoading(LoadingState.HIDE)
                 })
         )
     }

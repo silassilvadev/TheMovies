@@ -34,9 +34,9 @@ class DetailsPresenterTest : BaseMoviesTest() {
         detailsPresenter.loadDetails(-1)
 
         verify {
-            detailsView.updateLoading(LoadingState.SHOW)
+            detailsView.updateLoading(LoadingState.Show)
             detailsView.responseError(any())
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -49,9 +49,9 @@ class DetailsPresenterTest : BaseMoviesTest() {
         detailsPresenter.loadDetails(1)
 
         verify {
-            detailsView.updateLoading(LoadingState.SHOW)
+            detailsView.updateLoading(LoadingState.Show)
             detailsView.updateMovieDetails(any())
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -71,8 +71,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -89,8 +89,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -109,8 +109,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -129,8 +129,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -147,8 +147,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -165,8 +165,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -183,8 +183,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -203,8 +203,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -223,8 +223,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -243,8 +243,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -263,8 +263,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -283,8 +283,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -303,8 +303,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
         }
 
         verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.SHOW)
-            detailsView.updateLoading(LoadingState.HIDE)
+            detailsView.updateLoading(LoadingState.Show)
+            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 

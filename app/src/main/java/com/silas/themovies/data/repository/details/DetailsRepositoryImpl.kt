@@ -1,6 +1,5 @@
 package com.silas.themovies.data.repository.details
 
-import com.silas.themovies.data.repository.details.DetailsRepository
 import com.silas.themovies.data.sources.local.dao.FavoritesDao
 import com.silas.themovies.data.sources.remote.service.DetailsService
 import com.silas.themovies.model.entity.Movie
@@ -11,8 +10,7 @@ import io.reactivex.Single
 class DetailsRepositoryImpl(private val detailsService: DetailsService,
                             private val favoritesDao: FavoritesDao,
                             private val apiKey: String,
-                            private val language: String):
-    DetailsRepository {
+                            private val language: String): DetailsRepository {
 
     override fun loadDetails(movieId: Long): Single<Movie> {
         return detailsService.loadDetails(movieId, apiKey, language)

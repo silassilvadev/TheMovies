@@ -3,7 +3,7 @@ package com.silas.themovies.utils.custom
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class PaginationListener(private var totalResults: Int,
+class PaginationListener(private var totalItemsPage: Int,
                          private val onPagination: () -> Unit): RecyclerView.OnScrollListener() {
 
     var isLoadingEnable = false
@@ -13,7 +13,7 @@ class PaginationListener(private var totalResults: Int,
         (recyclerView.layoutManager as? GridLayoutManager)?.apply {
 
             if (newState == RecyclerView.SCROLL_STATE_IDLE && !isLoadingEnable) {
-                if (itemCount <= totalResults && findLastVisibleItemPosition() > (itemCount - 2)) {
+                if (itemCount <= totalItemsPage && findLastVisibleItemPosition() > (itemCount - 2)) {
                     onPagination.invoke()
                 }
             }

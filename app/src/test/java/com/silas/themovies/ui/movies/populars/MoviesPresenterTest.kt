@@ -35,10 +35,10 @@ class MoviesPresenterTest: BaseMoviesTest() {
 
         //Then
         verifyAll {
-            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateLoading(LoadingState.Show)
             moviesView.updateMovies(any())
             moviesView.responseError(any())
-            moviesView.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -47,16 +47,16 @@ class MoviesPresenterTest: BaseMoviesTest() {
         //Given
         every {
             moviesRepository.loadPopulars(any())
-        } returns Single.error(Throwable("Ocorreu um erro inxpedrado"))
+        } returns Single.error(Throwable("Ocorreu um erro inexperado"))
 
         //When
         moviesPresenter.loadMovies()
 
         //Then
         verifyAll {
-            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateLoading(LoadingState.Show)
             moviesView.responseError(any())
-            moviesView.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -72,10 +72,10 @@ class MoviesPresenterTest: BaseMoviesTest() {
 
         //Then
         verifyAll {
-            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateLoading(LoadingState.Show)
             moviesView.updateMovies(any())
             moviesView.responseError(any())
-            moviesView.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -84,16 +84,16 @@ class MoviesPresenterTest: BaseMoviesTest() {
         //Given
         every {
             moviesRepository.searchMovies(any(), any())
-        } returns Single.error(Throwable("Ocorreu um erro inxpedrado"))
+        } returns Single.error(Throwable("Ocorreu um erro inexperado"))
 
         //When
         moviesPresenter.loadMovies("Movie non-existent")
 
         //Then
         verifyAll {
-            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateLoading(LoadingState.Show)
             moviesView.responseError(any())
-            moviesView.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -108,9 +108,9 @@ class MoviesPresenterTest: BaseMoviesTest() {
         moviesPresenter.loadMovies()
 
         verifyAll {
-            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateLoading(LoadingState.Show)
             moviesView.updateMovies(any())
-            moviesView.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -124,14 +124,8 @@ class MoviesPresenterTest: BaseMoviesTest() {
 
         moviesPresenter.loadMovies(isNextPage = true)
 
-        verify {
+        verifyAll {
             moviesView.updateMovies(any())
-        }
-
-        // "exactly = 0", that is: check that the described functions have not been called
-        verify(exactly = 0) {
-            moviesView.updateLoading(LoadingState.SHOW)
-            moviesView.updateLoading(LoadingState.HIDE)
         }
     }
 
@@ -146,9 +140,9 @@ class MoviesPresenterTest: BaseMoviesTest() {
         moviesPresenter.loadMovies("Parasita")
 
         verifyAll {
-            moviesView.updateLoading(LoadingState.SHOW)
+            moviesView.updateLoading(LoadingState.Show)
             moviesView.updateMovies(any())
-            moviesView.updateLoading(LoadingState.HIDE)
+            moviesView.updateLoading(LoadingState.Hide)
         }
     }
 
