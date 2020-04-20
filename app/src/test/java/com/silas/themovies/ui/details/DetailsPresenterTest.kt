@@ -33,7 +33,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.loadDetails(-1)
 
-        verify {
+        verifyAll {
             detailsView.updateLoading(LoadingState.Show)
             detailsView.responseError(any())
             detailsView.updateLoading(LoadingState.Hide)
@@ -48,7 +48,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.loadDetails(1)
 
-        verify {
+        verifyAll {
             detailsView.updateLoading(LoadingState.Show)
             detailsView.updateMovieDetails(any())
             detailsView.updateLoading(LoadingState.Hide)
@@ -65,14 +65,9 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.loadRelated(1)
 
-        verify {
+        verifyAll {
             detailsView.updateRelated(any())
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -84,13 +79,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.loadRelated(1)
 
-        verify {
+        verifyAll {
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -104,13 +94,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.loadRelated(1)
 
-        verify {
+        verifyAll {
             detailsView.updateRelated(any())
-        }
-
-        verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -124,13 +109,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.loadRelated(1, true)
 
-        verify {
+        verifyAll {
             detailsView.updateRelated(any())
-        }
-
-        verify(exactly = 0) {
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -142,13 +122,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.checkIsFavorite(1)
 
-        verify {
+        verifyAll {
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -160,13 +135,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.checkIsFavorite(1)
 
-        verify {
+        verifyAll {
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -178,13 +148,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
         detailsPresenter.checkIsFavorite(1)
 
-        verify {
+        verifyAll {
             detailsView.isFavorite(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -198,13 +163,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
             every { hasFavorite } returns true
         })
 
-        verify {
+        verifyAll {
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -218,13 +178,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
             every { hasFavorite } returns true
         })
 
-        verify {
+        verifyAll {
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -238,13 +193,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
             every { hasFavorite } returns true
         })
 
-        verify {
+        verifyAll {
             detailsView.updateFavorite(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -258,13 +208,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
             every { hasFavorite } returns false
         })
 
-        verify {
+        verifyAll {
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -278,13 +223,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
             every { hasFavorite } returns false
         })
 
-        verify {
+        verifyAll {
             detailsView.responseError(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -298,13 +238,8 @@ class DetailsPresenterTest : BaseMoviesTest() {
             every { hasFavorite } returns false
         })
 
-        verify {
+        verifyAll {
             detailsView.updateFavorite(any())
-        }
-
-        verify(exactly = 0){
-            detailsView.updateLoading(LoadingState.Show)
-            detailsView.updateLoading(LoadingState.Hide)
         }
     }
 
@@ -317,7 +252,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
         detailsPresenter.destroy()
         detailsPresenter.loadDetails(1)
 
-        verify {
+        verifyAll {
             compositeDisposable.dispose()
         }
 
