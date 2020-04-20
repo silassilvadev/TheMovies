@@ -100,10 +100,8 @@ class MainActivity : GenericActivity(), SearchView.OnQueryTextListener, MenuItem
      * Responsible for loading the current Snippet by sending your current search
      */
     private fun loadInCurrentFragment(query: String) {
-        when (val fragment = this.viewPagerAdapter.getItem(tab_layout_main.selectedTabPosition)) {
-            is FavoritesFragment -> fragment.searchFavorites(query)
-            is PopularsFragment -> fragment.searchMovies(query)
-        }
+        val fragment = this.viewPagerAdapter.getItem(tab_layout_main.selectedTabPosition)
+        if (fragment is SearchContract) fragment.searchMovies(query)
     }
 
     private fun getSearchTitle(position: Int = 0): String {

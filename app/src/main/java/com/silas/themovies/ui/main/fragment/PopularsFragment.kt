@@ -12,6 +12,7 @@ import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.activity.DetailMovieActivity
 import com.silas.themovies.ui.generic.GenericFragment
 import com.silas.themovies.ui.main.activity.MainActivity
+import com.silas.themovies.ui.main.activity.SearchContract
 import com.silas.themovies.ui.main.presenter.movies.MoviesContract
 import com.silas.themovies.ui.main.presenter.movies.MoviesPresenter
 import com.silas.themovies.ui.main.presenter.movies.MoviesPresenter.Companion.ITEMS_PAGE
@@ -28,7 +29,7 @@ import org.koin.core.parameter.parametersOf
  * A simple [Fragment] subclass.
  */
 class PopularsFragment: GenericFragment(),
-    MoviesContract.View {
+    MoviesContract.View, SearchContract{
 
     private lateinit var moviesAdapter: MoviesAdapter
     private val popularsPresenter by inject<MoviesPresenter> {
@@ -85,6 +86,6 @@ class PopularsFragment: GenericFragment(),
         }
     }
 
-    internal fun searchMovies(query: String) = popularsPresenter.loadMovies(query)
+    override fun searchMovies(query: String) = popularsPresenter.loadMovies(query)
 
 }

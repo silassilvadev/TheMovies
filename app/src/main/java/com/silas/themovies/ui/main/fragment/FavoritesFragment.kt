@@ -10,6 +10,7 @@ import com.silas.themovies.model.entity.Movie
 import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.activity.DetailMovieActivity
 import com.silas.themovies.ui.generic.GenericFragment
+import com.silas.themovies.ui.main.activity.SearchContract
 import com.silas.themovies.ui.main.activity.MainActivity
 import com.silas.themovies.ui.main.presenter.favorites.FavoritesContract
 import com.silas.themovies.ui.main.presenter.favorites.FavoritesPresenter
@@ -21,7 +22,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Silas at 26/02/2020
  */
-class FavoritesFragment: GenericFragment(), FavoritesContract.View {
+class FavoritesFragment: GenericFragment(), FavoritesContract.View, SearchContract {
 
     private lateinit var moviesAdapter: MoviesAdapter
     private var layoutManager: GridLayoutManager? = null
@@ -53,8 +54,6 @@ class FavoritesFragment: GenericFragment(), FavoritesContract.View {
         currentScrollPosition = layoutManager?.findFirstVisibleItemPosition() ?: 0
     }
 
-    internal fun searchFavorites(query: String) = favoritesPresenter.loadFavorites(query)
-
     private fun setUpRecyclerView(){
         this.moviesAdapter = MoviesAdapter { movie ->
             startActivity<DetailMovieActivity>(MainActivity.KEY_MOVIE_SELECTED to movie)
@@ -85,4 +84,7 @@ class FavoritesFragment: GenericFragment(), FavoritesContract.View {
             LoadingState.Hide -> hideProgress()
         }
     }
+
+    override fun searchMovies(query: String) = favoritesPresenter.loadFavorites(query)
+
 }
