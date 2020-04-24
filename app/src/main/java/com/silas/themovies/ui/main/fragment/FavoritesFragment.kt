@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.silas.themovies.R
+import com.silas.themovies.di.ModulesFactory.FAVORITES_MODULE
 import com.silas.themovies.model.entity.Movie
 import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.activity.DetailMovieActivity
@@ -16,8 +17,10 @@ import com.silas.themovies.ui.main.presenter.favorites.FavoritesContract
 import com.silas.themovies.ui.main.presenter.favorites.FavoritesPresenter
 import com.silas.themovies.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_movies.*
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 
 /**
  * @author Silas at 26/02/2020
@@ -27,7 +30,8 @@ class FavoritesFragment: GenericFragment(), FavoritesContract.View, SearchContra
     private lateinit var moviesAdapter: MoviesAdapter
     private var layoutManager: GridLayoutManager? = null
 
-    private val favoritesPresenter by inject<FavoritesPresenter> {
+    private val favoritesScope = getKoin().getOrCreateScope("favorites", named(FAVORITES_MODULE))
+    private val favoritesPresenter by favoritesScope.inject<FavoritesPresenter> {
         parametersOf(this)
     }
 
@@ -52,6 +56,11 @@ class FavoritesFragment: GenericFragment(), FavoritesContract.View, SearchContra
     override fun onPause() {
         super.onPause()
         currentScrollPosition = layoutManager?.findFirstVisibleItemPosition() ?: 0
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        favoritesScope.close()
     }
 
     private fun setUpRecyclerView(){

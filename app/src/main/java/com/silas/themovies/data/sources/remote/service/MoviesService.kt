@@ -25,15 +25,4 @@ interface MoviesService {
                      @Query("language") language: String,
                      @Query("page") page: Int,
                      @Query("query") query: String): Single<PagedMovies>
-
-    @GET("movie/{movie_id}")
-    fun loadDetails(@Path("movie_id") movieId: Long,
-                    @Query("api_key") apiKey: String,
-                    @Query("language") language: String): Single<Movie>
-
-    @GET("movie/{movie_id}/similar")
-    fun loadRelated(@Path("movie_id") movieId: Long,
-                    @Query("api_key") apiKey: String,
-                    @Query("language") language: String,
-                    @Query("page") page: Int): Single<PagedMovies>
 }

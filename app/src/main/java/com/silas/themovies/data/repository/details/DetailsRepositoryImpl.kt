@@ -4,7 +4,6 @@ import com.silas.themovies.data.sources.local.dao.FavoritesDao
 import com.silas.themovies.data.sources.remote.service.DetailsService
 import com.silas.themovies.model.entity.Movie
 import com.silas.themovies.model.entity.PagedMovies
-import io.reactivex.Maybe
 import io.reactivex.Single
 
 class DetailsRepositoryImpl(private val detailsService: DetailsService,
@@ -12,24 +11,16 @@ class DetailsRepositoryImpl(private val detailsService: DetailsService,
                             private val apiKey: String,
                             private val language: String): DetailsRepository {
 
-    override fun loadDetails(movieId: Long): Single<Movie> {
-        return detailsService.loadDetails(movieId, apiKey, language)
-    }
+    override fun loadDetails(movieId: Long) = detailsService.loadDetails(movieId, apiKey, language)
 
     override fun loadRelated(page: Int, movieId: Long): Single<PagedMovies> {
         return detailsService.loadRelated(movieId, apiKey, language, page)
     }
 
-    override fun insertFavorite(vararg movie: Movie): Maybe<List<Long>> {
-        return favoritesDao.insertFavorite(*movie)
-    }
+    override fun insertFavorite(vararg movie: Movie) = favoritesDao.insertFavorite(*movie)
 
-    override fun deleteFavorite(vararg movie: Movie): Maybe<Int> {
-        return favoritesDao.deleteFavorite(*movie)
-    }
+    override fun deleteFavorite(vararg movie: Movie) = favoritesDao.deleteFavorite(*movie)
 
-    override fun checkFavoriteId(movieId: Long): Maybe<Movie?> {
-        return favoritesDao.checkFavoriteId(movieId)
-    }
+    override fun checkFavoriteId(movieId: Long) = favoritesDao.checkFavoriteId(movieId)
 
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.silas.themovies.R
+import com.silas.themovies.di.ModulesFactory.MOVIES_MODULE
 import com.silas.themovies.model.entity.PagedMovies
 import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.activity.DetailMovieActivity
@@ -22,8 +23,10 @@ import com.silas.themovies.utils.extensions.hideProgress
 import com.silas.themovies.utils.extensions.showProgress
 import com.silas.themovies.utils.extensions.startActivity
 import kotlinx.android.synthetic.main.fragment_movies.*
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 
 /**
  * A simple [Fragment] subclass.
@@ -32,7 +35,8 @@ class PopularsFragment: GenericFragment(),
     MoviesContract.View, SearchContract{
 
     private lateinit var moviesAdapter: MoviesAdapter
-    private val popularsPresenter by inject<MoviesPresenter> {
+    private val moviesScope = getKoin().getOrCreateScope("movies", named(MOVIES_MODULE))
+    private val popularsPresenter by moviesScope.inject<MoviesPresenter> {
         parametersOf(this)
     }
 
@@ -49,6 +53,11 @@ class PopularsFragment: GenericFragment(),
         setUpRecyclerView()
         setPaginationListener()
         popularsPresenter.loadMovies()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        moviesScope.close()
     }
 
     override fun updateMovies(pagedMovies: PagedMovies) {

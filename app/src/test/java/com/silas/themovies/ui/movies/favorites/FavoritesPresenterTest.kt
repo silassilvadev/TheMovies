@@ -6,7 +6,7 @@ import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.main.presenter.favorites.FavoritesContract
 import com.silas.themovies.ui.main.presenter.favorites.FavoritesPresenter
 import io.mockk.*
-import io.reactivex.Maybe
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.junit.Before
 import org.junit.Test
@@ -29,7 +29,7 @@ class FavoritesPresenterTest: BaseMoviesTest() {
         //Given
         every {
             favoritesRepository.loadFavorites()
-        } returns Maybe.just(arrayListOf())
+        } returns Single.just(arrayListOf())
 
         //When
         favoritesPresenter.loadFavorites()
@@ -48,7 +48,7 @@ class FavoritesPresenterTest: BaseMoviesTest() {
         //Given
         every {
             favoritesRepository.loadFavorites()
-        } returns Maybe.error(Throwable("Invalid data returned"))
+        } returns Single.error(Throwable("Invalid data returned"))
 
         //When
         favoritesPresenter.loadFavorites()
@@ -66,7 +66,7 @@ class FavoritesPresenterTest: BaseMoviesTest() {
         //Given
         every {
             favoritesRepository.searchFavorites(any())
-        } returns Maybe.just(arrayListOf())
+        } returns Single.just(arrayListOf())
 
         //When
         favoritesPresenter.loadFavorites("Favorite non-existent")
@@ -85,7 +85,7 @@ class FavoritesPresenterTest: BaseMoviesTest() {
         //Given
         every {
             favoritesRepository.searchFavorites(any())
-        } returns  Maybe.error(Throwable("Invalid data returned"))
+        } returns  Single.error(Throwable("Invalid data returned"))
 
         //When
         favoritesPresenter.loadFavorites("Favorite non-existent")
@@ -102,7 +102,7 @@ class FavoritesPresenterTest: BaseMoviesTest() {
     fun `Get all favorite movies returns successful`() {
         every {
             favoritesRepository.loadFavorites()
-        } returns Maybe.just(arrayListOf(mockk()))
+        } returns Single.just(arrayListOf(mockk()))
 
         favoritesPresenter.loadFavorites()
 
@@ -117,7 +117,7 @@ class FavoritesPresenterTest: BaseMoviesTest() {
     fun `Search favorite movies returns successful`() {
         every {
             favoritesRepository.searchFavorites(any())
-        } returns Maybe.just(arrayListOf(mockk()))
+        } returns Single.just(arrayListOf(mockk()))
 
         favoritesPresenter.loadFavorites("Parasita")
 
@@ -132,7 +132,7 @@ class FavoritesPresenterTest: BaseMoviesTest() {
     fun `Checking if view is destroyed`() {
         every {
             favoritesRepository.loadFavorites()
-        } returns Maybe.just(mockk(relaxed = true))
+        } returns Single.just(mockk(relaxed = true))
 
         favoritesPresenter.destroy()
         favoritesPresenter.loadFavorites()

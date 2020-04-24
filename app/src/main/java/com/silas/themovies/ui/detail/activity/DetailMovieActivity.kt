@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.silas.themovies.R
+import com.silas.themovies.di.ModulesFactory.DETAILS_MODULE
 import com.silas.themovies.model.entity.Movie
 import com.silas.themovies.model.entity.PagedMovies
 import com.silas.themovies.model.type.BackDropType
@@ -18,8 +19,10 @@ import com.silas.themovies.utils.custom.PaginationListener
 import com.silas.themovies.utils.extensions.*
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 import kotlinx.android.synthetic.main.activity_detail_movie.text_view_detail_movie_popularity
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 
 /**
  * After selecting a movie to view details, this class goes into action to search for details,
@@ -36,7 +39,8 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
 
     private lateinit var relatedAdapter: MoviesAdapter
 
-    private val detailsPresenter by inject<DetailsPresenter> {
+    private val detailsScope = getKoin().getOrCreateScope("details", named(DETAILS_MODULE))
+    private val detailsPresenter by detailsScope.inject<DetailsPresenter> {
         parametersOf(this)
     }
     private var paginationListener: PaginationListener? = null
@@ -50,6 +54,11 @@ class DetailMovieActivity : GenericActivity(), View.OnClickListener, DetailsCont
         else onMessage(getString(R.string.detail_movie_error_data_init))
 
         initViews()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        detailsScope.close()
     }
 
     override fun onClick(view: View?) {

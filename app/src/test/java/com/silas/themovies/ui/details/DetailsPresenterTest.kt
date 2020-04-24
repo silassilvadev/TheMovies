@@ -6,7 +6,6 @@ import com.silas.themovies.ui.LoadingState
 import com.silas.themovies.ui.detail.presenter.DetailsContract
 import com.silas.themovies.ui.detail.presenter.DetailsPresenter
 import io.mockk.*
-import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.junit.Before
@@ -15,10 +14,10 @@ import java.lang.NullPointerException
 
 class DetailsPresenterTest : BaseMoviesTest() {
 
+    private lateinit var detailsPresenter: DetailsContract.Presenter
     private val detailsRepository = mockk<DetailsRepository>(relaxed = true)
     private val compositeDisposable = mockk<CompositeDisposable>(relaxed = true)
     private val detailsView = mockk<DetailsContract.View>(relaxed = true)
-    private lateinit var detailsPresenter: DetailsContract.Presenter
 
     @Before
     fun setUp() {
@@ -118,7 +117,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Verify is favorite invalid`(){
         every {
             detailsRepository.checkFavoriteId(any())
-        } returns Maybe.just(null)
+        } returns Single.just(null)
 
         detailsPresenter.checkIsFavorite(1)
 
@@ -131,7 +130,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Verify is favorite error`() {
         every {
             detailsRepository.checkFavoriteId(any())
-        } returns Maybe.error(Throwable("Invalid favorites"))
+        } returns Single.error(Throwable("Invalid favorites"))
 
         detailsPresenter.checkIsFavorite(1)
 
@@ -144,7 +143,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Verify is favorite success`() {
         every {
             detailsRepository.checkFavoriteId(any())
-        } returns Maybe.just(mockk(relaxed = true))
+        } returns Single.just(mockk(relaxed = true))
 
         detailsPresenter.checkIsFavorite(1)
 
@@ -157,7 +156,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Insert favorites error`() {
         every {
             detailsRepository.insertFavorite(any())
-        } returns Maybe.error(Throwable("Invalid insert favorite"))
+        } returns Single.error(Throwable("Invalid insert favorite"))
 
         detailsPresenter.updateFavorite(mockk {
             every { hasFavorite } returns true
@@ -172,7 +171,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Insert favorites success invalid`() {
         every {
             detailsRepository.insertFavorite(any())
-        } returns Maybe.just(arrayListOf())
+        } returns Single.just(arrayListOf())
 
         detailsPresenter.updateFavorite(mockk {
             every { hasFavorite } returns true
@@ -187,7 +186,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Insert favorites success`() {
         every {
             detailsRepository.insertFavorite(any())
-        } returns Maybe.just(listOf(1L))
+        } returns Single.just(listOf(1L))
 
         detailsPresenter.updateFavorite(mockk {
             every { hasFavorite } returns true
@@ -202,7 +201,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Remove favorites error`() {
         every {
             detailsRepository.deleteFavorite(any())
-        } returns Maybe.error(Throwable("Invalid remove favorite"))
+        } returns Single.error(Throwable("Invalid remove favorite"))
 
         detailsPresenter.updateFavorite(mockk {
             every { hasFavorite } returns false
@@ -217,7 +216,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Remove favorite success invalid`() {
         every {
             detailsRepository.deleteFavorite(any())
-        } returns Maybe.just(0)
+        } returns Single.just(0)
 
         detailsPresenter.updateFavorite(mockk {
             every { hasFavorite } returns false
@@ -232,7 +231,7 @@ class DetailsPresenterTest : BaseMoviesTest() {
     fun `Remove favorite success`() {
         every {
             detailsRepository.deleteFavorite(any())
-        } returns Maybe.just(1)
+        } returns Single.just(1)
 
         detailsPresenter.updateFavorite(mockk {
             every { hasFavorite } returns false

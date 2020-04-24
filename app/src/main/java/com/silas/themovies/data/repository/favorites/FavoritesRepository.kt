@@ -1,9 +1,10 @@
 package com.silas.themovies.data.repository.favorites
 
 import com.silas.themovies.model.entity.Movie
-import io.reactivex.Maybe
+import io.reactivex.Single
+
 
 interface FavoritesRepository {
-    fun loadFavorites(): Maybe<List<Movie>>
-    fun searchFavorites(query: String): Maybe<List<Movie>>
+    fun loadFavorites(): Single<List<Movie>>
+    fun searchFavorites(query: String): Single<List<Movie>>
 }
