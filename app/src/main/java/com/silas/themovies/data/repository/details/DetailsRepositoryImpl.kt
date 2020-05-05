@@ -1,7 +1,7 @@
 package com.silas.themovies.data.repository.details
 
-import com.silas.themovies.data.sources.local.dao.FavoritesDao
-import com.silas.themovies.data.sources.remote.service.DetailsService
+import com.silas.themovies.data.source.local.dao.FavoritesDao
+import com.silas.themovies.data.source.remote.service.DetailsService
 import com.silas.themovies.model.entity.Movie
 import com.silas.themovies.model.entity.PagedMovies
 import io.reactivex.Single

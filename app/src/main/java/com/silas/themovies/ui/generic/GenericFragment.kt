@@ -3,7 +3,6 @@ package com.silas.themovies.ui.generic
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.silas.themovies.R
-import com.silas.themovies.ui.IViewProtocol
 import com.silas.themovies.utils.extensions.getContentView
 
 /**

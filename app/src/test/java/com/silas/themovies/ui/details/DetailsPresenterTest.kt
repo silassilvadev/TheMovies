@@ -2,9 +2,9 @@ package com.silas.themovies.ui.details
 
 import com.silas.themovies.data.repository.details.DetailsRepository
 import com.silas.themovies.utils.BaseMoviesTest
-import com.silas.themovies.ui.LoadingState
-import com.silas.themovies.ui.detail.presenter.DetailsContract
-import com.silas.themovies.ui.detail.presenter.DetailsPresenter
+import com.silas.themovies.model.state.LoadingState
+import com.silas.themovies.ui.detail.DetailsContract
+import com.silas.themovies.ui.detail.DetailsPresenter
 import io.mockk.*
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -21,7 +21,11 @@ class DetailsPresenterTest : BaseMoviesTest() {
 
     @Before
     fun setUp() {
-        detailsPresenter = DetailsPresenter(detailsView, compositeDisposable, detailsRepository)
+        detailsPresenter = DetailsPresenter(
+            detailsView,
+            compositeDisposable,
+            detailsRepository
+        )
     }
 
     @Test

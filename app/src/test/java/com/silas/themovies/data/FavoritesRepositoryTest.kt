@@ -2,18 +2,11 @@ package com.silas.themovies.data
 
 import com.silas.themovies.data.repository.favorites.FavoritesRepository
 import com.silas.themovies.data.repository.favorites.FavoritesRepositoryImpl
-import com.silas.themovies.data.sources.local.dao.FavoritesDao
-import com.silas.themovies.model.entity.PagedMovies
+import com.silas.themovies.data.source.local.dao.FavoritesDao
 import com.silas.themovies.utils.BaseMoviesTest
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verifyAll
-import io.reactivex.Maybe
-import io.reactivex.MaybeObserver
 import io.reactivex.Single
-import io.reactivex.internal.operators.maybe.MaybeCallbackObserver
-import io.reactivex.observers.TestObserver
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 

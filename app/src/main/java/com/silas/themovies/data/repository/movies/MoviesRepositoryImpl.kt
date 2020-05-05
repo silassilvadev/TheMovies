@@ -1,6 +1,6 @@
 package com.silas.themovies.data.repository.movies
 
-import com.silas.themovies.data.sources.remote.service.MoviesService
+import com.silas.themovies.data.source.remote.service.MoviesService
 import com.silas.themovies.model.entity.PagedMovies
 import io.reactivex.Single
 

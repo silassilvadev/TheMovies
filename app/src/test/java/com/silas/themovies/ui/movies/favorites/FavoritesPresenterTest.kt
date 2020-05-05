@@ -2,9 +2,9 @@ package com.silas.themovies.ui.movies.favorites
 
 import com.silas.themovies.data.repository.favorites.FavoritesRepository
 import com.silas.themovies.utils.BaseMoviesTest
-import com.silas.themovies.ui.LoadingState
-import com.silas.themovies.ui.main.presenter.favorites.FavoritesContract
-import com.silas.themovies.ui.main.presenter.favorites.FavoritesPresenter
+import com.silas.themovies.model.state.LoadingState
+import com.silas.themovies.ui.main.favorite.FavoritesContract
+import com.silas.themovies.ui.main.favorite.FavoritesPresenter
 import io.mockk.*
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -21,7 +21,11 @@ class FavoritesPresenterTest: BaseMoviesTest() {
     @Before
     fun setUp() {
         this.favoritesPresenter =
-            FavoritesPresenter(favoritesView, compositeDisposable, favoritesRepository)
+            FavoritesPresenter(
+                favoritesView,
+                compositeDisposable,
+                favoritesRepository
+            )
     }
 
     @Test

@@ -18,8 +18,8 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n">
 
-        <activity android:name=".ui.detail.activity.DetailMovieActivity" />
-        <activity android:name=".ui.main.activity.MainActivity" />
+        <activity android:name=".ui.detail.DetailMovieActivity" />
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.splash.SplashScreenActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

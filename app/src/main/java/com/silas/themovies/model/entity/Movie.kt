@@ -36,11 +36,11 @@ data class Movie(@PrimaryKey(autoGenerate = true)
 
                  @SerializedName("backdrop_path")
                  @ColumnInfo(name = "backdrop_path")
-                 var endPointBackDrop: String = "",
+                 var backdropPath: String = "",
 
                  @SerializedName("poster_path")
                  @ColumnInfo(name = "poster_path")
-                 var endPointPosterPath: String = "",
+                 var posterPath: String = "",
 
                  @ColumnInfo(name = "has_favorite")
                  var hasFavorite: Boolean): Parcelable

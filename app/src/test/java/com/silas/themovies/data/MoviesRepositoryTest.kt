@@ -2,7 +2,7 @@ package com.silas.themovies.data
 
 import com.silas.themovies.data.repository.movies.MoviesRepository
 import com.silas.themovies.data.repository.movies.MoviesRepositoryImpl
-import com.silas.themovies.data.sources.remote.service.MoviesService
+import com.silas.themovies.data.source.remote.service.MoviesService
 import com.silas.themovies.utils.BaseMoviesTest
 import io.mockk.every
 import io.mockk.mockk

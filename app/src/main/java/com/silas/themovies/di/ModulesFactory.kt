@@ -1,5 +1,9 @@
 package com.silas.themovies.di
 
+import com.silas.themovies.ui.detail.ModuleDetails
+import com.silas.themovies.ui.main.favorite.ModuleFavorites
+import com.silas.themovies.ui.main.movies.ModuleMovies
+
 /**
  * Configuration of dependency injections in the necessary modules of the App
  *

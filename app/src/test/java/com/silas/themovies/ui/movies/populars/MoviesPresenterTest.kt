@@ -2,9 +2,9 @@ package com.silas.themovies.ui.movies.populars
 
 import com.silas.themovies.data.repository.movies.MoviesRepository
 import com.silas.themovies.utils.BaseMoviesTest
-import com.silas.themovies.ui.LoadingState
-import com.silas.themovies.ui.main.presenter.movies.MoviesContract
-import com.silas.themovies.ui.main.presenter.movies.MoviesPresenter
+import com.silas.themovies.model.state.LoadingState
+import com.silas.themovies.ui.main.movies.MoviesContract
+import com.silas.themovies.ui.main.movies.MoviesPresenter
 import io.mockk.*
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable

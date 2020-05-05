@@ -1,6 +1,6 @@
 package com.silas.themovies.data.repository.favorites
 
-import com.silas.themovies.data.sources.local.dao.FavoritesDao
+import com.silas.themovies.data.source.local.dao.FavoritesDao
 import com.silas.themovies.model.entity.Movie
 import io.reactivex.Single
 

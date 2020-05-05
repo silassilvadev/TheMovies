@@ -2,8 +2,8 @@ package com.silas.themovies.data
 
 import com.silas.themovies.data.repository.details.DetailsRepository
 import com.silas.themovies.data.repository.details.DetailsRepositoryImpl
-import com.silas.themovies.data.sources.local.dao.FavoritesDao
-import com.silas.themovies.data.sources.remote.service.DetailsService
+import com.silas.themovies.data.source.local.dao.FavoritesDao
+import com.silas.themovies.data.source.remote.service.DetailsService
 import com.silas.themovies.utils.BaseMoviesTest
 import io.mockk.every
 import io.mockk.mockk
